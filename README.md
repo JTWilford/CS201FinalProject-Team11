@@ -36,4 +36,5 @@ git clone https://github.com/JTWilford/CS201FinalProject-Team11.git
       - Click "Server Runtime", then click "Next"
       - Click "Apache Tomcat v9.0", then click "Finish"
     - Click "Apply and Close" at the bottom of the window
+    
 **Your Eclipse Environment should be set up now!**
