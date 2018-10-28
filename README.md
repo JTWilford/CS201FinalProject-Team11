@@ -24,7 +24,7 @@ git clone https://github.com/JTWilford/CS201FinalProject-Team11.git
     - At the bottom, click "Further configuration available..."
       - In the popup window, change the Context Root to "/" and change the Content Directory to "/web"
       - Click "Ok" at the bottom of the window
-  - Click "Apply and Close" at the bottom of the window
+    - Click "Apply and Close" at the bottom of the window
 4. Right-click the project again and click "Properties" (This must be done after you closed the first properties window)
     - On the left, click "Server"
     - Click "Tomcat v9.0 Server at localhost"
