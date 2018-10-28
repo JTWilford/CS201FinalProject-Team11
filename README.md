@@ -1,5 +1,5 @@
 # CS201 Final Project: New CSCI201 Website
-###Team 11
+### Team 11
 #### Members
 - Yash Bhartia – ybhartia@usc.edu
 - Addison Herr – aherr@usc.edu
