@@ -29,7 +29,7 @@ git clone https://github.com/JTWilford/CS201FinalProject-Team11.git
     - On the left, click "Server"
     - Click "Tomcat v9.0 Server at localhost"
       - If this option isn't there, please follow the instructions in [Lab 1.1 Part 2](http://www-scf.usc.edu/~csci201/labs/Lab1.pdf)
-      - Make sure "Tomcat v9.0 Server at localhost" is highlighted, then click "Apply"
+    - Make sure "Tomcat v9.0 Server at localhost" is highlighted, then click "Apply"
     - On the left, click "Java Build Path"
     - Open the "Libraries" tab
     - Click "Add Library..." on the right
