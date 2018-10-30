@@ -6,6 +6,18 @@
 - Yang Li – yli546@usc.edu
 - Justin Wilford – jwilford@usc.edu
 - Tianyi Yu – tianyiyu@usc.edu
+## Software
+### Node.js
+1. Download [Node.js 8.12.0 LTS](https://nodejs.org/)
+2. Install Node with the default settings
+3. Restart your computer
+**Node.js should be installed now!**
+### Angular CLI
+1. Open Terminal (Unix) or Command Prompt (Windows) and execute the following command:
+```
+npm install -g @angular/cli
+```
+**Angular CLI should be installed now!**
 ## Set-up
 ### Eclipse
 1. Clone the repository into your Eclipse Workspace folder
