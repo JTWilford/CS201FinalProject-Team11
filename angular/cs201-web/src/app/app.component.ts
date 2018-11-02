@@ -7,4 +7,8 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'cs201-web';
+
+  loadOnClick() {
+    console.log("not much");
+  }
 }
