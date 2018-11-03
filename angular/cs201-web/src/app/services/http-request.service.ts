@@ -1,6 +1,9 @@
 import {HttpClient} from "@angular/common/http";
+import {Observable} from "rxjs";
 
 export class HttpRequestService {
+
+  private backendUrl = "/";
   //Inject an HttpClient via the constructor
   constructor (private http: HttpClient) {}
 
@@ -14,8 +17,8 @@ export class HttpRequestService {
   //--------------------------------------------------------------------------------------------------------------------
   //  Account System Requests
   //--------------------------------------------------------------------------------------------------------------------
-  loginAccount(email: string, password: string){
-
+  loginAccount(email: string, password: string): Observable<any>{
+    return this.http.get(this.backendUrl + "Accounts");
   }
   //Should return all the data from the Accounts servlet, if the user's level is high enough
   searchAccount() {
