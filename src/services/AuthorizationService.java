@@ -13,18 +13,16 @@ public class AuthorizationService {
     @OnOpen
     public void open(Session session) {
         System.out.println("Connection!");
-        sessions.add(new SessionInfo(1, "temp@temp.com", "Temp", "orary", 1, session));
+        sessions.add(new SessionInfo(session));
     }
 
     @OnMessage
     public void message(String message, Session session) {
         System.out.println(message);
-        for(SessionInfo s : sessions) {
-            try {
-                s.session.getBasicRemote().sendText(message);
-            } catch (IOException ioe) {
-                System.out.println("ioe: " + ioe.getMessage());
-            }
+        try {
+            session.getBasicRemote().sendText("This is the back-end");
+        } catch (IOException ioe) {
+            System.out.println("ioe: " + ioe.getMessage());
         }
     }
 
@@ -48,11 +46,13 @@ public class AuthorizationService {
 
 //A class for holding session info
 class SessionInfo {
+    //Whether or not the user has logged in
+    public boolean authorized = false;
     //Unique ID
     public int uscID;
     //User's email
     public String email;
-    //USer's full name
+    //User's full name
     public String firstName;
     public String lastName;
     //User's permission level
@@ -60,12 +60,14 @@ class SessionInfo {
     //The user's Websocket Session
     public Session session;
 
-    public SessionInfo(int uscID, String email, String firstName, String lastName, int level, Session session) {
-        this.uscID = uscID;
-        this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.level = level;
+    public SessionInfo(Session session) {
+        this.authorized = false;
+        this.uscID = -1;
+        this.email = "";
+        this.firstName = "";
+        this.lastName = "";
+        this.level = -1;
+        //Set the session
         this.session = session;
     }
 }
