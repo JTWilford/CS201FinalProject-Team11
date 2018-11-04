@@ -18,3 +18,16 @@
   width: 100%;
 }
 
+.jumbotron {
+  padding: 1.5rem 2rem !important;
+}
+
+.login-info {
+  font-weight: 300;
+  font-size: 1.5rem;
+}
+
+.lead {
+  margin-bottom: .3rem;
+  font-style: italic;
+}
