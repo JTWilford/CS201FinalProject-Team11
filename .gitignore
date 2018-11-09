@@ -31,7 +31,7 @@ target/
 *.ipr
 .idea/
 
-# eclipse project file
+ # eclipse project file
 .settings/
 .classpath
 .project
