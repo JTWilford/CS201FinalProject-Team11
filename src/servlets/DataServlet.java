@@ -1,8 +1,6 @@
 package servlets;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -42,84 +40,6 @@ public class DataServlet extends HttpServlet {
 		System.out.println("[DataServlet] " + msg);
 	}
 
-	// protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//		String FileType = request.getParameter("FileType");
-//		connect();
-//		try {
-//			if (FileType.equals("assignment")) {
-//				List<Assignment> assignments = new ArrayList<>();
-//				ps = conn.prepareStatement("SELECT number, title, assignedDate, dueDate, pdfLink, additionalFiles FROM Assignment");
-//				rs = ps.executeQuery();
-//				while (rs.next()) {
-//					Assignment assignment = new Assignment();
-//					assignment.number = rs.getInt("number");
-//					assignment.title = rs.getString("title");
-//					assignment.assignedDate = rs.getString("assignedDate");
-//					assignment.dueDate = rs.getString("dueDate");
-//					assignment.pdfLink = rs.getInt("pdfLink");
-//					assignment.additionalFiles = rs.getBoolean("additionalFiles");
-//					assignments.add(assignment);
-//				}
-//				request.getSession(true).setAttribute("assignments", assignments);
-//				request.getServletContext().getRequestDispatcher("/assignments");
-//			} // Retrieves all the assignment information in the Assignment database
-//			else if (FileType.equals("lab")) {
-//				List<Lab> labs = new ArrayList<>();
-//				ps = conn.prepareStatement("SELECT number, labDate, labTopics, pdfLink, additionalFiles FROM Labs");
-//				rs = ps.executeQuery();
-//				while (rs.next()) {
-//					Lab lab = new Lab();
-//					lab.number = rs.getInt("number");
-//					lab.labDate = rs.getString("labDate");
-//					lab.labTopics = rs.getString("labTopics");
-//					lab.pdfLink = rs.getInt("pdfLink");
-//					lab.additionalFiles = rs.getBoolean("additionalFiles");
-//					labs.add(lab);
-//				}
-//				request.getSession(true).setAttribute("labs", labs);
-//				request.getServletContext().getRequestDispatcher("/lecture-labs");
-//			} // Retrieves all the lab information in the Labs database
-//			else if (FileType.equals("lecture")) {
-//				List<Lecture> lectures = new ArrayList<>();
-//				ps = conn.prepareStatement("SELECT number, lectureDate, lectureTopics, chapters, lectureSlides, programsLink FROM Lectures");
-//				rs = ps.executeQuery();
-//				while (rs.next()) {
-//					Lecture lecture = new Lecture();
-//					lecture.number = rs.getInt("number");
-//					lecture.lectureDate = rs.getString("lectureDate");
-//					lecture.lectureTopics = rs.getString("lectureTopics");
-//					lecture.chapters = rs.getString("chapters");
-//					lecture.lectureSlides = rs.getBoolean("lectureSlides");
-//					lecture.programsLink = rs.getInt("programsLink");
-//					lectures.add(lecture);
-//				}
-//				request.getSession(true).setAttribute("lectures", lectures);
-//				request.getServletContext().getRequestDispatcher("/lecture-labs");
-//			} // Retrieves all the lecture information in the Lectures database
-//			else if (FileType.equals("exam")) {
-//				List<Exam> exams = new ArrayList<>();
-//				ps = conn.prepareStatement("SELECT examDate, type, pdfLink, solutions FROM PreviousExams");
-//				rs = ps.executeQuery();
-//				while (rs.next()) {
-//					Exam exam = new Exam();
-//					exam.examDate = rs.getString("examDate");
-//					exam.type = rs.getString("type");
-//					exam.pdfLink = rs.getInt("pdfLink");
-//					exam.solutions = rs.getBoolean("solutions");
-//					exams.add(exam);
-//				}
-//				request.getSession(true).setAttribute("exams", exams);
-//				request.getServletContext().getRequestDispatcher("/exams");
-//			} // Retrieves all the previous exam information in the PreviousExams database
-//		} catch (SQLException sqle) {
-//			// TODO: handle exception
-//			System.out.println("sqle: " + sqle.getMessage());
-//		} finally {
-//			closeResultStatementSet();
-//			closeConnection();
-//		}
-	// }
-
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Debug("This is a test. We're in POST");
 	}
@@ -129,19 +49,25 @@ public class DataServlet extends HttpServlet {
 		String FileType = request.getParameter("FileType");
 		connect();
 		PrintWriter pw = response.getWriter();
+		if (FileType == null) {
+			pw.println("Error: please specify a file type");
+			return;
+		}
 		try {
 			if (FileType.equals("assignment")) {
 				List<Assignment> assignments = new ArrayList<>();
-				ps = conn.prepareStatement("SELECT number, title, assignedDate, dueDate, pdfLink, additionalFiles FROM Assignments");
+				ps = conn.prepareStatement("SELECT number, title, gradePercent, assignedDate, dueDate, pdfLink, additionalFiles, solutionLink FROM Assignments");
 				rs = ps.executeQuery();
 				while (rs.next()) {
 					Assignment assignment = new Assignment();
 					assignment.number = rs.getInt("number");
 					assignment.title = rs.getString("title");
+					assignment.gradePercent = rs.getFloat("gradePercent");
 					assignment.assignedDate = rs.getString("assignedDate");
 					assignment.dueDate = rs.getString("dueDate");
 					assignment.pdfLink = rs.getInt("pdfLink");
 					assignment.additionalFiles = rs.getBoolean("additionalFiles");
+					assignment.solutionLink = rs.getInt("solutionLink");
 					assignments.add(assignment);
 				}
 				pw.println(gson.toJson(assignments));
@@ -159,12 +85,11 @@ public class DataServlet extends HttpServlet {
 					lab.additionalFiles = rs.getBoolean("additionalFiles");
 					labs.add(lab);
 				}
-				request.getSession(true).setAttribute("labs", labs);
-				request.getServletContext().getRequestDispatcher("/lecture-labs");
+				pw.println(gson.toJson(labs));
 			} // Retrieves all the lab information in the Labs database
 			else if (FileType.equals("lecture")) {
 				List<Lecture> lectures = new ArrayList<>();
-				ps = conn.prepareStatement("SELECT number, lectureDate, lectureTopics, chapters, lectureSlides, programsLink FROM Lectures");
+				ps = conn.prepareStatement("SELECT number, lectureDate, lectureTopics, chapters, lectureSlides, programsLinks FROM Lectures");
 				rs = ps.executeQuery();
 				while (rs.next()) {
 					Lecture lecture = new Lecture();
@@ -173,11 +98,10 @@ public class DataServlet extends HttpServlet {
 					lecture.lectureTopics = rs.getString("lectureTopics");
 					lecture.chapters = rs.getString("chapters");
 					lecture.lectureSlides = rs.getBoolean("lectureSlides");
-					lecture.programsLink = rs.getInt("programsLink");
+					lecture.programsLinks = rs.getInt("programsLinks");
 					lectures.add(lecture);
 				}
-				request.getSession(true).setAttribute("lectures", lectures);
-				request.getServletContext().getRequestDispatcher("/lecture-labs");
+				pw.println(gson.toJson(lectures));
 			} // Retrieves all the lecture information in the Lectures database
 			else if (FileType.equals("exam")) {
 				List<Exam> exams = new ArrayList<>();
@@ -191,8 +115,7 @@ public class DataServlet extends HttpServlet {
 					exam.solutions = rs.getBoolean("solutions");
 					exams.add(exam);
 				}
-				request.getSession(true).setAttribute("exams", exams);
-				request.getServletContext().getRequestDispatcher("/exams");
+				pw.println(gson.toJson(exams));
 			} // Retrieves all the previous exam information in the PreviousExams database
 		} catch (SQLException sqle) {
 			// TODO: handle exception
@@ -247,7 +170,8 @@ public class DataServlet extends HttpServlet {
 
 class Assignment {
 	int number; // assignment number
-	String title; // title 
+	String title; // title
+	float gradePercent; // final grade percent
 	String assignedDate; // assigned date
 	String dueDate; // due date 
 	int pdfLink; // link to the assignment's pdf
@@ -269,7 +193,7 @@ class Lecture {
 	String lectureTopics; // lecture topics
 	String chapters; // chapter numbers 
 	boolean lectureSlides; // link to lecture slides 
-	int programsLink; // links to demos/programs/git repo (can be empty)
+	int programsLinks; // links to demos/programs/git repo (can be empty)
 }
 
 class Exam {

@@ -33,6 +33,7 @@ CREATE TABLE Assignments (
   assignmentID INT(11) PRIMARY KEY AUTO_INCREMENT, # reference assignment entries
   number INT(6) UNIQUE NOT NULL, # the assignment number
   title VARCHAR(50) NOT NULL, # the assignment title
+  gradePercent FLOAT(5,2) NOT NULL, # final grade percent
   assignedDate VARCHAR(12) NOT NULL, # (MM/DD/YYYY) the given date of assignment
   dueDate VARCHAR(12) NOT NULL, # (MM/DD/YYYY) the due date of assignment
   pdfLink INT(11), # assignment pdf link
