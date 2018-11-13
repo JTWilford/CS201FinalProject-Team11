@@ -36,7 +36,7 @@ CREATE TABLE Assignments (
   assignedDate VARCHAR(12) NOT NULL, # (MM/DD/YYYY) the given date of assignment
   dueDate VARCHAR(12) NOT NULL, # (MM/DD/YYYY) the due date of assignment
   pdfLink INT(11), # assignment pdf link
-  additionalFiles BOOLEAN NOT NULL, # link to any additional files (can be null)
+  additionalFiles BOOLEAN NOT NULL DEFAULT FALSE, # link to any additional files (can be null)
   solutionLink INT(11), # link to the solution (only be available after the professor enables it)
   FOREIGN KEY fk1(pdfLink) REFERENCES Links(linkID),
   FOREIGN KEY fk2(solutionLink) REFERENCES Links(linkID)
@@ -59,7 +59,7 @@ CREATE TABLE Labs (
   labDate VARCHAR(12) NOT NULL, # (MM/DD/YYYY) date of the lab assigned
   labTopics VARCHAR(150) NOT NULL, # topics covered in the lab
   pdfLink INT(11) NOT NULL, # link to the lab pdf
-  additionalFiles BOOLEAN NOT NULL, # whether or not there are additional files associated with the lab
+  additionalFiles BOOLEAN NOT NULL DEFAULT FALSE, # whether or not there are additional files associated with the lab
   solutionLink INT(11) NOT NULL, # link to lab solution zip file / github repo
   FOREIGN KEY fk4(pdfLink) REFERENCES Links(linkID),
   FOREIGN KEY fk5(solutionLink) REFERENCES Links(linkID)

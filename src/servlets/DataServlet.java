@@ -125,7 +125,7 @@ public class DataServlet extends HttpServlet {
 		try {
 			if (FileType.equals("assignment")) {
 				List<Assignment> assignments = new ArrayList<>();
-				ps = conn.prepareStatement("SELECT number, title, assignedDate, dueDate, pdfLink, additionalFiles FROM Assignment");
+				ps = conn.prepareStatement("SELECT number, title, assignedDate, dueDate, pdfLink, additionalFiles FROM Assignments");
 				rs = ps.executeQuery();
 				while (rs.next()) {
 					Assignment assignment = new Assignment();
