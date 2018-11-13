@@ -15,6 +15,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @WebServlet(
@@ -49,77 +50,107 @@ public class DataServlet extends HttpServlet {
 		String FileType = request.getParameter("FileType");
 		connect();
 		PrintWriter pw = response.getWriter();
+		//Add the access control header to the response
+		response.setHeader("Access-Control-Allow-Origin", "*");
+
 		if (FileType == null) {
-			pw.println("Error: please specify a file type");
+			//pw.println("Error: please specify a file type");
+			//Add an error in a wrapper
+			DataWrapper wrap = new DataWrapper();
+			wrap.error = "Please specify a file type";
+			//Send the wrapper as JSON
+			pw.println(gson.toJson(wrap));
 			return;
 		}
 		try {
-			if (FileType.equals("assignment")) {
-				List<Assignment> assignments = new ArrayList<>();
-				ps = conn.prepareStatement("SELECT number, title, gradePercent, assignedDate, dueDate, pdfLink, additionalFiles, solutionLink FROM Assignments");
-				rs = ps.executeQuery();
-				while (rs.next()) {
-					Assignment assignment = new Assignment();
-					assignment.number = rs.getInt("number");
-					assignment.title = rs.getString("title");
-					assignment.gradePercent = rs.getFloat("gradePercent");
-					assignment.assignedDate = rs.getString("assignedDate");
-					assignment.dueDate = rs.getString("dueDate");
-					assignment.pdfLink = rs.getInt("pdfLink");
-					assignment.additionalFiles = rs.getBoolean("additionalFiles");
-					assignment.solutionLink = rs.getInt("solutionLink");
-					assignments.add(assignment);
-				}
-				pw.println(gson.toJson(assignments));
-			} // Retrieves all the assignment information in the Assignment database
-			else if (FileType.equals("lab")) {
-				List<Lab> labs = new ArrayList<>();
-				ps = conn.prepareStatement("SELECT number, labDate, labTopics, pdfLink, additionalFiles FROM Labs");
-				rs = ps.executeQuery();
-				while (rs.next()) {
-					Lab lab = new Lab();
-					lab.number = rs.getInt("number");
-					lab.labDate = rs.getString("labDate");
-					lab.labTopics = rs.getString("labTopics");
-					lab.pdfLink = rs.getInt("pdfLink");
-					lab.additionalFiles = rs.getBoolean("additionalFiles");
-					labs.add(lab);
-				}
-				pw.println(gson.toJson(labs));
-			} // Retrieves all the lab information in the Labs database
-			else if (FileType.equals("lecture")) {
-				List<Lecture> lectures = new ArrayList<>();
-				ps = conn.prepareStatement("SELECT number, lectureDate, lectureTopics, chapters, lectureSlides, programsLinks FROM Lectures");
-				rs = ps.executeQuery();
-				while (rs.next()) {
-					Lecture lecture = new Lecture();
-					lecture.number = rs.getInt("number");
-					lecture.lectureDate = rs.getString("lectureDate");
-					lecture.lectureTopics = rs.getString("lectureTopics");
-					lecture.chapters = rs.getString("chapters");
-					lecture.lectureSlides = rs.getBoolean("lectureSlides");
-					lecture.programsLinks = rs.getInt("programsLinks");
-					lectures.add(lecture);
-				}
-				pw.println(gson.toJson(lectures));
-			} // Retrieves all the lecture information in the Lectures database
-			else if (FileType.equals("exam")) {
-				List<Exam> exams = new ArrayList<>();
-				ps = conn.prepareStatement("SELECT examDate, type, pdfLink, solutions FROM PreviousExams");
-				rs = ps.executeQuery();
-				while (rs.next()) {
-					Exam exam = new Exam();
-					exam.examDate = rs.getString("examDate");
-					exam.type = rs.getString("type");
-					exam.pdfLink = rs.getInt("pdfLink");
-					exam.solutions = rs.getBoolean("solutions");
-					exams.add(exam);
-				}
-				pw.println(gson.toJson(exams));
-			} // Retrieves all the previous exam information in the PreviousExams database
+			switch (FileType) {
+				case "assignment":	// Retrieves all the assignment information in the Assignment database
+					List<Assignment> assignments = new ArrayList<>();
+					ps = conn.prepareStatement("SELECT number, title, gradePercent, assignedDate, dueDate, pdfLink, additionalFiles, solutionLink FROM Assignments");
+					rs = ps.executeQuery();
+					while (rs.next()) {
+						Assignment assignment = new Assignment();
+						assignment.number = rs.getInt("number");
+						assignment.title = rs.getString("title");
+						assignment.gradePercent = rs.getFloat("gradePercent");
+						assignment.assignedDate = rs.getString("assignedDate");
+						assignment.dueDate = rs.getString("dueDate");
+						assignment.pdfLink = rs.getInt("pdfLink");
+						assignment.additionalFiles = rs.getBoolean("additionalFiles");
+						assignment.solutionLink = rs.getInt("solutionLink");
+						assignments.add(assignment);
+					}
+					//Insert into the data wrapper
+					DataWrapper<Assignment> assignmentWrap = new DataWrapper<>();
+					assignmentWrap.data = assignments;
+					pw.println(gson.toJson(assignmentWrap));
+					break;
+				case "lab":		// Retrieves all the lab information in the Labs database
+					List<Lab> labs = new ArrayList<>();
+					ps = conn.prepareStatement("SELECT number, labDate, labTopics, pdfLink, additionalFiles FROM Labs");
+					rs = ps.executeQuery();
+					while (rs.next()) {
+						Lab lab = new Lab();
+						lab.number = rs.getInt("number");
+						lab.labDate = rs.getString("labDate");
+						lab.labTopics = rs.getString("labTopics");
+						lab.pdfLink = rs.getInt("pdfLink");
+						lab.additionalFiles = rs.getBoolean("additionalFiles");
+						labs.add(lab);
+					}
+					//Insert into the data wrapper
+					DataWrapper<Lab> labWrap = new DataWrapper<>();
+					labWrap.data = labs;
+					pw.println(gson.toJson(labWrap));
+					break;
+				case "lecture":		// Retrieves all the lecture information in the Lectures database
+					List<Lecture> lectures = new ArrayList<>();
+					ps = conn.prepareStatement("SELECT number, lectureDate, lectureTopics, chapters, lectureSlides, programsLinks FROM Lectures");
+					rs = ps.executeQuery();
+					while (rs.next()) {
+						Lecture lecture = new Lecture();
+						lecture.number = rs.getInt("number");
+						lecture.lectureDate = rs.getString("lectureDate");
+						lecture.lectureTopics = rs.getString("lectureTopics");
+						lecture.chapters = rs.getString("chapters");
+						lecture.lectureSlides = rs.getBoolean("lectureSlides");
+						lecture.programsLinks = rs.getInt("programsLinks");
+						lectures.add(lecture);
+					}
+					//Insert into the data wrapper
+					DataWrapper<Lecture> lectureWrap = new DataWrapper<>();
+					lectureWrap.data = lectures;
+					pw.println(gson.toJson(lectureWrap));
+					break;
+				case "exam":		// Retrieves all the previous exam information in the PreviousExams database
+					List<Exam> exams = new ArrayList<>();
+					ps = conn.prepareStatement("SELECT examDate, type, pdfLink, solutions FROM PreviousExams");
+					rs = ps.executeQuery();
+					while (rs.next()) {
+						Exam exam = new Exam();
+						exam.examDate = rs.getString("examDate");
+						exam.type = rs.getString("type");
+						exam.pdfLink = rs.getInt("pdfLink");
+						exam.solutions = rs.getBoolean("solutions");
+						exams.add(exam);
+					}
+					//Insert into the data wrapper
+					DataWrapper<Exam> examWrap = new DataWrapper<>();
+					examWrap.data = exams;
+					pw.println(gson.toJson(examWrap));
+					break;
+				default:		// The file type was invalid
+					DataWrapper wrap = new DataWrapper();
+					wrap.error = "Unknown File Type: '" + FileType + "'. Please specify from assignment, lecture, lab, or exam";
+					pw.println(gson.toJson(wrap));
+			}
 		} catch (SQLException sqle) {
 			// TODO: handle exception
 			System.out.println("sqle: " + sqle.getMessage());
+			//Send the error to the frontend
+			DataWrapper wrap = new DataWrapper();
+			wrap.error = "SQL Exception: " + sqle.getMessage();
+			pw.println(gson.toJson(wrap));
 		} finally {
 			closeResultStatementSet();
 			closeConnection();
@@ -201,4 +232,9 @@ class Exam {
 	String type; // whether or not the exam was written or programming 
 	int pdfLink; // the link to pdf of the exam
 	boolean solutions; // links to the solutions 
+}
+
+class DataWrapper<E> {
+	String error = "";
+	List<E> data = new LinkedList<>();
 }

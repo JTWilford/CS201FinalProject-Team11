@@ -13,6 +13,8 @@ import { AttendanceComponent } from './component/attendance/attendance.component
 import { CourseRosterComponent } from './component/course-roster/course-roster.component';
 import { PageNotFoundComponent } from './component/page-not-found/page-not-found.component';
 
+import { HttpClientModule } from '@angular/common/http';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -28,7 +30,8 @@ import { PageNotFoundComponent } from './component/page-not-found/page-not-found
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

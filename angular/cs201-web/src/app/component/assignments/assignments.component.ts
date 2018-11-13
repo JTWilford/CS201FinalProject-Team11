@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {DataService} from "../../services/data.service";
+import {Assignment} from "../../interfaces/assignment.interface";
 
 @Component({
   selector: 'app-assignments',
@@ -7,9 +9,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AssignmentsComponent implements OnInit {
 
-  constructor() { }
+  constructor(private dataService: DataService) { }
+
+  hasLoaded = false;
+  assignments: Assignment[];
 
   ngOnInit() {
+    this.hasLoaded = false;
+    this.dataService.getAssignments().then((response) => {
+      console.log("[Assignment] Recieved Data");
+      this.assignments = response;
+      console.log(this.assignments);
+    })
   }
 
 }

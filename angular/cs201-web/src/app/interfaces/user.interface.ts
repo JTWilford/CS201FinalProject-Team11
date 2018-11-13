@@ -1,5 +1,3 @@
-import {HttpClient} from "@angular/common/http";
-
 export interface UserInterface {
   firstName: string;
   lastName: string;

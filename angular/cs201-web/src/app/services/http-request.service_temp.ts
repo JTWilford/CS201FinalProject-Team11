@@ -1,10 +1,7 @@
-import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
+import {catchError, map} from "rxjs/operators";
 
-@Injectable({
-  providedIn: 'root'
-})
 export class HttpRequestService {
 
   private backendUrl = "http://localhost:8080";
@@ -31,7 +28,7 @@ export class HttpRequestService {
   }
 
   private getData(type: string): Observable<any> {
-    return this.http.get(`${this.backendUrl}/Data`, {params: {FileType:type}});
+    return this.http.get(this.backendUrl + "/Data", {params: {type:type}});
   }
 
   //--------------------------------------------------------------------------------------------------------------------
