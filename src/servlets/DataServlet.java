@@ -1,5 +1,8 @@
 package servlets;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -7,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -16,13 +20,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet(
-        name = "DataServlet",
-        description = "Handles requests for data on the site to populate tables",
-        urlPatterns = {"/Data"}
+		name = "DataServlet",
+		description = "Handles requests for data on the site to populate tables",
+		urlPatterns = {"/Data"}
 )
 public class DataServlet extends HttpServlet {
-    /**
-	 * 
+	/**
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 	private static final String sqlusername = "root";
@@ -32,11 +36,13 @@ public class DataServlet extends HttpServlet {
 	private static ResultSet rs = null;
 	private static PreparedStatement ps = null;
 
+	private Gson gson = new Gson();
+
 	private void Debug(String msg) {
-        System.out.println("[DataServlet] " + msg);
-    }
-    
-   // protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		System.out.println("[DataServlet] " + msg);
+	}
+
+	// protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 //		String FileType = request.getParameter("FileType");
 //		connect();
 //		try {
@@ -112,16 +118,17 @@ public class DataServlet extends HttpServlet {
 //			closeResultStatementSet();
 //			closeConnection();
 //		}
-   // }
+	// }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Debug("This is a test. We're in POST");
-    }
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Debug("This is a test. We're in POST");
+	}
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Debug("This is a test. We're in GET");
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Debug("This is a test. We're in GET");
 		String FileType = request.getParameter("FileType");
 		connect();
+		PrintWriter pw = response.getWriter();
 		try {
 			if (FileType.equals("assignment")) {
 				List<Assignment> assignments = new ArrayList<>();
@@ -137,8 +144,7 @@ public class DataServlet extends HttpServlet {
 					assignment.additionalFiles = rs.getBoolean("additionalFiles");
 					assignments.add(assignment);
 				}
-				request.getSession(true).setAttribute("assignments", assignments);
-				request.getServletContext().getRequestDispatcher("/assignments");
+				pw.println(gson.toJson(assignments));
 			} // Retrieves all the assignment information in the Assignment database
 			else if (FileType.equals("lab")) {
 				List<Lab> labs = new ArrayList<>();
@@ -195,9 +201,9 @@ public class DataServlet extends HttpServlet {
 			closeResultStatementSet();
 			closeConnection();
 		}
-    }
-    
-    public static void connect() {
+	}
+
+	public static void connect() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/Data?user=" + sqlusername + "&password="
@@ -225,7 +231,7 @@ public class DataServlet extends HttpServlet {
 			sqle.printStackTrace();
 		}
 	} // function to disconnect from the server
-	
+
 	public static void closeConnection() {
 		try {
 			if (conn != null) {
