@@ -12,6 +12,8 @@ import { PreviousExamsComponent } from './component/previous-exams/previous-exam
 import { AttendanceComponent } from './component/attendance/attendance.component';
 import { CourseRosterComponent } from './component/course-roster/course-roster.component';
 import { PageNotFoundComponent } from './component/page-not-found/page-not-found.component';
+import { CalendarComponent } from './component/calendar/calendar.component';
+import { ProfileComponent } from './component/profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,9 @@ import { PageNotFoundComponent } from './component/page-not-found/page-not-found
     PreviousExamsComponent,
     AttendanceComponent,
     CourseRosterComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    CalendarComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
