@@ -17,9 +17,10 @@ export class AssignmentsComponent implements OnInit {
   ngOnInit() {
     this.hasLoaded = false;
     this.dataService.getAssignments().then((response) => {
-      console.log("[Assignment] Recieved Data");
+      console.log("[AssignmentComponent] Recieved Data");
       this.assignments = response;
       console.log(this.assignments);
+      this.hasLoaded = true;
     })
   }
 

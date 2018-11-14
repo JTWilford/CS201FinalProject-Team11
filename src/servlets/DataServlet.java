@@ -114,7 +114,7 @@ public class DataServlet extends HttpServlet {
 						lecture.lectureTopics = rs.getString("lectureTopics");
 						lecture.chapters = rs.getString("chapters");
 						lecture.lectureSlides = rs.getBoolean("lectureSlides");
-						lecture.programsLinks = rs.getInt("programsLinks");
+						lecture.programFiles = rs.getInt("programsLinks");
 						lectures.add(lecture);
 					}
 					//Insert into the data wrapper
@@ -224,7 +224,7 @@ class Lecture {
 	String lectureTopics; // lecture topics
 	String chapters; // chapter numbers 
 	boolean lectureSlides; // link to lecture slides 
-	int programsLinks; // links to demos/programs/git repo (can be empty)
+	int programFiles; // links to demos/programs/git repo (can be empty)
 }
 
 class Exam {

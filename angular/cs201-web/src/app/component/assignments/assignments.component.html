@@ -7,33 +7,34 @@
         <thead>
         <tr>
           <th scope="col">Homework #</th>
-          <th scope="col">Assigned</th>
-          <th scope="col">Due</th>
-          <th scope="col">Assignment</th>
-          <th scope="col">% Grade</th>
-          <th scope="col">Grading Criteria</th>
+          <th scope="col">Assigned Date</th>
+          <th scope="col">Due Date</th>
+          <th scope="col">Assignment Details</th>
+          <th scope="col">Grade Weight</th>
+          <th scope="col">Additional Files</th>
           <th scope="col">Solution</th>
         </tr>
         </thead>
         <tbody>
-        <tr>
-          <th scope="row">30303R</th>
-          <td>Tuesday/Thursday<br>8:00a.m.-9:20a.m.</td>
-          <td>SLH 102</td>
-          <td>Peija Lu</td>
-        </tr>
-        <tr>
-          <th scope="row">29909R</th>
-          <td>Tuesday/Thursday<br>9:30a.m.-10:50a.m.</td>
-          <td>GFS 116</td>
-          <td>Aya Shimizu</td>
-        </tr>
-        <tr>
-          <th scope="row">30245R</th>
-          <td>Tuesday/Thursday<br>11:00a.m.-12:20p.m.</td>
-          <td>GFS 116</td>
-          <td>Isabelle Tobolski</td>
-        </tr>
+        <ng-container *ngIf="hasLoaded">
+          <ng-container *ngFor="let row of assignments">    <!--Dynamically generate the rows with a for loop-->
+            <tr>
+              <th scope="row">{{row.number}}</th>
+              <td>{{row.assignedDate}}</td>
+              <td>{{row.dueDate}}</td>
+              <td><a [href]="row.pdfLink.location">{{row.pdfLink.display}}</a></td>
+              <td>{{row.gradePercent}}%</td>
+              <td>
+                <!--Generate a list of links for the additional files section-->
+                <ng-container *ngFor="let link of row.additionalLinks">
+                  <a [href]="link.location">{{link.display}}</a>
+                  <br />
+                </ng-container>
+              </td>
+              <td><a [href]="row.solutionLink.location">{{row.solutionLink.display}}</a></td>
+            </tr>
+          </ng-container>
+        </ng-container>
         </tbody>
       </table>
     </div>

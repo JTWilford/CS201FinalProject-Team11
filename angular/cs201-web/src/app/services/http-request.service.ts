@@ -19,15 +19,15 @@ export class HttpRequestService {
   }
 
   getLectureData() {
-
+    return this.getData("lecture");
   }
 
   getLabData() {
-
+    return this.getData("lab");
   }
 
   getExamData() {
-
+    return this.getData("exam");
   }
 
   private getData(type: string): Observable<any> {
