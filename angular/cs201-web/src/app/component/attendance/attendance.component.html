@@ -1,3 +1,30 @@
-<p>
-  attendance works!
-</p>
+<div class="buttonDiv">
+  <button (click)="getLocation()" type="button" class="btn btn-block btn-lg btn-success">Check In</button>
+  <button type="button" id="attendance" class="btn btn-block btn-lg btn-secondary">View Attendance History</button>
+  <table id="datatable" class="table datatable">
+    <thead>
+    <tr>
+      <th scope="col">Class #</th>
+      <th scope="col">Date</th>
+      <th scope="col">Attendance</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <th scope="row">1</th>
+      <td>August 17</td>
+      <td class="present">Present</td>
+    </tr>
+    <tr>
+      <th scope="row">2</th>
+      <td>August 19</td>
+      <td class="absent">Absent</td>
+    </tr>
+    <tr>
+      <th scope="row">3</th>
+      <td>August 24</td>
+      <td class="present">Present</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
