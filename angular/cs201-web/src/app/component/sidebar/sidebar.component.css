@@ -165,3 +165,8 @@ a.article:hover {
     display: none;
   }
 }
+
+.dropdown-item.active{
+  background-color: white;
+  color: black;
+}

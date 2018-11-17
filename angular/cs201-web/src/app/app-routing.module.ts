@@ -8,6 +8,7 @@ import {LecturesLabsComponent} from "./component/lectures-labs/lectures-labs.com
 import {PreviousExamsComponent} from "./component/previous-exams/previous-exams.component";
 import {PageNotFoundComponent} from "./component/page-not-found/page-not-found.component";
 import {ProfileComponent} from "./component/profile/profile.component";
+import {SignUpComponent} from "./component/sign-up/sign-up.component";
 
 
 const routes: Routes = [
@@ -18,6 +19,7 @@ const routes: Routes = [
   {path: 'lectures-labs', component: LecturesLabsComponent},
   {path: 'previous-exams', component: PreviousExamsComponent},
   {path: 'profile', component: ProfileComponent},
+  {path: 'signup', component: SignUpComponent},
 
 
   {path: '', redirectTo:'/home', pathMatch: 'full'},
