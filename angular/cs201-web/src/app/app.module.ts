@@ -14,8 +14,7 @@ import { CourseRosterComponent } from './component/course-roster/course-roster.c
 import { PageNotFoundComponent } from './component/page-not-found/page-not-found.component';
 
 import { HttpClientModule } from '@angular/common/http';
-import {AuthenticationService} from "./services/authentication.service";
-import {DataService} from "./services/data.service";
+import { SignUpComponent } from './component/sign-up/sign-up.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +27,8 @@ import {DataService} from "./services/data.service";
     PreviousExamsComponent,
     AttendanceComponent,
     CourseRosterComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    SignUpComponent
   ],
   imports: [
     BrowserModule,
