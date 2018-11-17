@@ -50,3 +50,58 @@ git clone https://github.com/JTWilford/CS201FinalProject-Team11.git
     - Click "Apply and Close" at the bottom of the window
     
 **Your Eclipse Environment should be set up now!**
+To start the backend, click the play button at the top of the window
+
+### IntelliJ IDEA
+1. Clone the repository into your IntelliJ Projects folder
+```
+cd [IntelliJ Projects Directory]
+git clone https://github.com/JTWilford/CS201FinalProject-Team11.git
+```
+2. In IntelliJ, click "File">"Open..." and in the pop-up navigate to the repository you just cloned. Highlight the repository, then click "Ok"
+3. Now, click "File">"Project Structure"
+    - In the Project Structure window, click "Project" in the left pane
+        - Select the Project SDK to be Java 1.8.
+        - Select SDK Level to be 8
+        - Select the output directory to be "[path to your project directory]/out/"
+    - Now, click "Facets" in the left pane
+        - At the top of the window, click the plus button, then click "Web"
+        - In the new pop-up, highlight the project, then click "Ok"
+        - At the bottom of the Project Structure window, click "Create Artifact"
+        - Now, click "Apply" at the bottom of the window, then click "Ok" at the bottom of the window
+    - In the Project Structure window, click "Modules" in the left pane
+        - Now, click the project name, which should be underneath the plus button
+            - Click on the "Sources" tab
+            - Highlight the "src" folder, then click the "Sources" button with the blue folder icon
+            - Highlight the "web" folder, then click the "Sources" button with the blue folder icon
+            - Now, "src" and "web" should be blue folders
+                - If they are not the right color, redo the step for that folder
+            - Click the "Apply" button at the bottom of the Project Structure window
+    - In the Project Structure window, click "Libraries" in the left pane
+        - Click the plus button at the top of the window, then select "Java"
+        - In the new pop-up, navigate to your Apache Tomcat's installation directory
+            - For Mac users, you will have to use the "shift-cmd-G" shortcut, then enter "/usr/local/apache-tomcat-9.0.11/"
+            - For Windows users, navigate to "C:\Program Files\Apache Software Foundation\Tomcat 9.0\"
+            - Once you are in your Tomcat installation directory, open the "lib" folder
+            - Select both "servlet-api.jar" and "websocket-api.jar" then click "Ok"
+            - In the next pop-up, select the project, then click "Ok"
+        - Now, click "Apply" at the bottom of the window then click "Ok" at the bottom of the window
+5. Click "Run">"Edit Configurations..."
+    - In the Run/Debug Configurations window, click the plus at the top left of the window
+        - select "Tomcat Server">"Local"
+    - Now, name the new configuration "Run Backend"
+    - At the bottom of the window, it should say "Warning: No artifacts marked for deployment". Click the "Fix" button next to the message
+    - Now, click "Apply" at the bottom of the window, then click "Ok" at the bottom of the window
+**Your IntelliJ Environment should be set up now!**
+To start the backend, click the play button at the top right of the window while "Run Backend" is selected
+
+## Running Angular
+1. In a terminal/command prompt, navigate to your project directory.
+2. cd into "./angular/cs201-web/"
+3. run the following commands
+```
+npm install
+npm start
+```
+4. After the second command, when the terminal says "Compiled Successfully", your angular environment has been started
+5. Navigate to "http://localhost:4200/" to view the website

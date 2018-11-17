@@ -10,10 +10,10 @@ export class WebsocketService {
 
   private subject: Subject<MessageEvent>;
 
-  public connect(url): Subject<MessageEvent> {
+  public connect(url = "ws://localhost:8080/session"): Subject<MessageEvent> {
     if(!this.subject) {
       this.subject = this.create(url);
-      console.log("Successfully Connected: " + url);
+      console.log("[WebSocketService] Successfully Connected: " + url);
     }
     return this.subject;
   }

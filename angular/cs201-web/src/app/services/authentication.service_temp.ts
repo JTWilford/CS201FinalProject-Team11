@@ -2,11 +2,7 @@ import {HttpRequestService} from "./http-request.service";
 import {UserInterface} from "../interfaces/user.interface";
 import {BehaviorSubject} from "rxjs";
 import {WebsocketService} from "./websocket.service";
-import {Injectable} from "@angular/core";
 
-@Injectable({
-  providedIn: 'root'
-})
 export class AuthenticationService {
   //The current user's information. Until the user logs in, should be null
   private currentUser: UserInterface;

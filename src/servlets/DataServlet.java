@@ -233,8 +233,3 @@ class Exam {
 	int pdfLink; // the link to pdf of the exam
 	boolean solutions; // links to the solutions 
 }
-
-class DataWrapper<E> {
-	String error = "";
-	List<E> data = new LinkedList<>();
-}
