@@ -12,6 +12,10 @@ import { PreviousExamsComponent } from './component/previous-exams/previous-exam
 import { AttendanceComponent } from './component/attendance/attendance.component';
 import { CourseRosterComponent } from './component/course-roster/course-roster.component';
 import { PageNotFoundComponent } from './component/page-not-found/page-not-found.component';
+import { ProfileComponent } from './component/profile/profile.component';
+import { CalendarComponent } from './component/calendar/calendar.component';
+
+
 
 import { HttpClientModule } from '@angular/common/http';
 import { SignUpComponent } from './component/sign-up/sign-up.component';
@@ -20,6 +24,8 @@ import { SignUpComponent } from './component/sign-up/sign-up.component';
   declarations: [
     AppComponent,
     SidebarComponent,
+    CalendarComponent,
+    ProfileComponent,
     TopbarComponent,
     HomeComponent,
     LecturesLabsComponent,

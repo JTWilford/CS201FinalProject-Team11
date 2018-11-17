@@ -1,0 +1,37 @@
+
+ul ul a {
+  font-size: 0.9em !important;
+  padding-left: 30px !important;
+  background: #6d7fcc;
+}
+
+ul.CTAs {
+  padding: 20px;
+}
+
+ul.CTAs a {
+  text-align: center;
+  font-size: 1.1em !important;
+  display: block;
+  border-radius: 5px;
+  margin-bottom: 5px;
+}
+
+a.download {
+  background: #fff;
+  color: #964242;
+}
+
+a.article,
+a.article:hover {
+  background: #843636 !important;
+  color: #fff !important;
+}
+
+
+.calDiv{
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+}
