@@ -7,6 +7,8 @@ import {CourseRosterComponent} from "./component/course-roster/course-roster.com
 import {LecturesLabsComponent} from "./component/lectures-labs/lectures-labs.component";
 import {PreviousExamsComponent} from "./component/previous-exams/previous-exams.component";
 import {PageNotFoundComponent} from "./component/page-not-found/page-not-found.component";
+import {ProfileComponent} from "./component/profile/profile.component";
+
 
 const routes: Routes = [
   {path: 'assignments', component: AssignmentsComponent},
@@ -15,6 +17,8 @@ const routes: Routes = [
   {path: 'home', component: HomeComponent},
   {path: 'lectures-labs', component: LecturesLabsComponent},
   {path: 'previous-exams', component: PreviousExamsComponent},
+  {path: 'profile', component: ProfileComponent},
+
 
   {path: '', redirectTo:'/home', pathMatch: 'full'},
   {path: '**', component: PageNotFoundComponent}
