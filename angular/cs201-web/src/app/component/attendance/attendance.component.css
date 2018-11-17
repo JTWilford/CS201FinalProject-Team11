@@ -32,3 +32,10 @@
 .absent{
   color: red;
 }
+
+.scrollable-menu {
+  height: auto;
+  max-height: 50vh;
+  width: 30vh !important;
+  overflow-x: hidden;
+}

@@ -7,9 +7,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AttendanceComponent implements OnInit {
 
+  shouldShow: boolean = false;
+
   constructor() { }
 
   ngOnInit() {
+  }
+
+  toggleShow() {
+    this.shouldShow = !this.shouldShow;
   }
 
 }
