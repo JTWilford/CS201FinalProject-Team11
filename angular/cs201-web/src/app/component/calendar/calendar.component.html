@@ -1,10 +1,19 @@
 <div class="calDiv">
-  <div class="btn-group dropup">
-    <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      View Calendar
-    </button>
-    <div class="dropdown-menu dropdown-menu-right">
+  <button (click)="toggleShow()" type="button" class="btn btn-secondary">{{(shouldShow)?"Hide":"Show"}} Calendar</button>
+  <div class="positioning" style="background-color: white">
+    <ng-container *ngIf="shouldShow">
+      <div style="  box-shadow: 0 10px 50px 0 rgba(0, 0, 0, 0.4)">
+      <mwl-calendar-month-view
+        [@.disabled]="true"
+        [viewDate]="viewDate"
+        [events]="events"
+        [activeDayIsOpen]="activeDayIsOpen"
+        (dayClicked)="dayClicked($event.day)">
+      </mwl-calendar-month-view>
       </div>
-    </div>
+    </ng-container>
   </div>
+</div>
+
+
 

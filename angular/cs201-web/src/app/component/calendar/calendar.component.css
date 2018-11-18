@@ -35,3 +35,16 @@ a.article:hover {
   bottom: 0;
   z-index: 100;
 }
+
+.positioning{
+  position: fixed;
+  right: 1.5vh;
+  bottom: 5vh;
+  z-index: 100;
+  width: 60vh;
+}
+
+.sizelock{
+  height: 4vh;
+  width: 10vh;
+}
