@@ -8,7 +8,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.jasper.tagplugins.jstl.core.ForEach;
 
+import com.google.gson.Gson;
 import com.mysql.fabric.RangeShardMapping;
+import com.sun.beans.editors.IntegerEditor;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -17,6 +19,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLRecoverableException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -40,6 +43,8 @@ public class AttendanceServlet extends HttpServlet {
 	private static Connection conn = null;
 	private static ResultSet rs = null;
 	private static PreparedStatement ps = null;
+	
+	private Gson gson = new Gson();
     /*
     * Post Request:
     *   Expected Format:
@@ -53,7 +58,6 @@ public class AttendanceServlet extends HttpServlet {
     *
     *   Response:
     *       success: a boolean stating whether or not the user checked in
-    *       time: the time of the check-in (see RFC3339, its the format the Java DateTime object should give you)
     *
     * */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -62,6 +66,7 @@ public class AttendanceServlet extends HttpServlet {
     	int latitude = Integer.parseInt(request.getParameter("latitude"));
     	int longitude = Integer.parseInt(request.getParameter("longitude"));
     	PrintWriter pw = response.getWriter();
+    	response.setHeader("Access-Control-Allow-Origin", "*");
     	boolean success = false;
     	if (classes[classID].x1 < latitude && classes[classID].x2 > latitude && classes[classID].y1 < longitude && classes[classID].y2 > longitude) {
     		success = true;
@@ -76,10 +81,14 @@ public class AttendanceServlet extends HttpServlet {
 			} catch (SQLException sqle) {
 				// TODO: handle exception
 				System.out.println("sqle: " + sqle.getMessage());
+			} finally {
+				closeResultStatementSet();
+				closeConnection();
 			}
+    		pw.println(success);
+    		// pw.println(System.currentTimeMillis());
     	}
-    	 
-    	// 
+ 
     }
 
     /*
@@ -94,12 +103,40 @@ public class AttendanceServlet extends HttpServlet {
     *       err: a string that will contain an error message (if there is one, otherwise will be null)
     *       data: a JSON object containing the requested user's attendance data in the following format:
     *           date: the date of the class attended (MM-DD-YYYY)
-    *           time: the time of the check-in (mm:mm:ssT[Time-Zone])(see RFC3339, its the format the Java DateTime object should give you)
     *           classID: the unique class identifier
     *
     * */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+    	int studentID = Integer.parseInt(request.getParameter("studentID"));
+    	List<Record> records = new ArrayList<>();
+    	PrintWriter pw = response.getWriter();
+    	connect();
+    	
+    	try {
+			ps = conn.prepareStatement("SELECT date, lecturePeriod FROM Attendance WHERE uscID=?");
+			ps.setInt(1, studentID);
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				Record record = new Record();
+				record.date = rs.getString("date");
+				record.lecturePeriod = rs.getInt("lecturePeriod");
+				records.add(record);
+			}
+			DataWrapper<Record> recordWrap = new DataWrapper<>();
+			if (records.isEmpty()) {
+				recordWrap.error = "There is no such student or the student does not attend any lectures,";
+				pw.println(gson.toJson(recordWrap));
+			} else {
+				recordWrap.data = records;
+				pw.println(gson.toJson(recordWrap));
+			}
+		} catch (SQLException sqle) {
+			// TODO: handle exception
+			System.out.println("sqle: " + sqle.getMessage());
+		} finally {
+			closeResultStatementSet();
+			closeConnection();
+		}
     }
     
     public static void connect() {
@@ -155,5 +192,10 @@ class Classroom {
         this.y1 = _y1;
         this.y2 = _y2;
     }
+}
+
+class Record {
+	public String date;
+	public int lecturePeriod;
 }
 	
