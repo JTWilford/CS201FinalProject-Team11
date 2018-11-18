@@ -85,7 +85,11 @@ public class AttendanceServlet extends HttpServlet {
 				closeResultStatementSet();
 				closeConnection();
 			}
-    		pw.println(success);
+    		DataWrapper wrapper = new DataWrapper();
+    		if (!success) {
+    			wrapper.error = "failed to check in";
+    		}
+    		pw.println(gson.toJson(wrapper));
     		// pw.println(System.currentTimeMillis());
     	}
  
