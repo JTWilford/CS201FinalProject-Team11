@@ -91,6 +91,6 @@ CREATE TABLE Attendance (
   attendanceID INT(11) PRIMARY KEY AUTO_INCREMENT, # reference entries in attendance table
   uscID INT(11) NOT NULL, # associate an entry with a user
   date VARCHAR(12) NOT NULL, # (MM/DD/YYYY) date of the user checked into class
-  lecturePeriod VARCHAR(8) NOT NULL, # lecture period the user checked in
+  lecturePeriod INT(11) NOT NULL, # lecture period the user checked in
   FOREIGN KEY fk12(uscID) REFERENCES Account(uscID)
 );
