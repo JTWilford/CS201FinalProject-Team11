@@ -38,7 +38,7 @@ public class AttendanceServlet extends HttpServlet {
 	                                      new Classroom(34.019941, 34.020470, -118.286028, -118.285410)
 	};
 	private static final String sqlusername = "root";
-	private static final String sqlpassword = "Liyang19990803";
+	private static final String sqlpassword = "root";
 
 	private static Connection conn = null;
 	private static ResultSet rs = null;
