@@ -1,55 +1,76 @@
 import {HttpRequestService} from "./http-request.service";
 import {UserInterface} from "../interfaces/user.interface";
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject, Subject} from "rxjs";
 import {WebsocketService} from "./websocket.service";
 import {Injectable} from "@angular/core";
+import {map} from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService {
   //The current user's information. Until the user logs in, should be null
-  private currentUser: UserInterface;
+  private currentUser: UserInterface = {
+    firstName: "",
+    lastName: "",
+    email: "",
+    uscID: 0,
+    level: 0,
+    authorized: false
+  };
   private hasLoggedIn: BehaviorSubject<boolean> = new BehaviorSubject(false);
   public $loggedIn = this.hasLoggedIn.asObservable();
+  private socket: Subject<Message>;
+
   //Inject an HttpRequestService via the constructor
   constructor (private httpRequestService: HttpRequestService,
                private webSocketService: WebsocketService) {
     this.currentUser = null;
   }
 
-  public login(username: string, password: string) {
-    //TODO: Connect to backend with a web socket and subscribe to it
-    this.webSocketService.connect();
-    //Tell observers that the user isn't logged in
-    this.hasLoggedIn.next(false);
-    //Make a request to the backend to login
-    this.httpRequestService.loginAccount(username, password).subscribe((data) => {
-      //Set the user's information based on the response
-      this.currentUser.uscID = data["uscID"];
-      this.currentUser.firstName = data["fname"];
-      this.currentUser.lastName = data["lname"];
-      this.currentUser.email = data["email"];
-      this.currentUser.level = data["level"];
-
-      switch (this.currentUser.level) {
-        case 1:
-          this.currentUser.levelString = "Professor";
-          break;
-        case 2:
-          this.currentUser.levelString = "TA/CP";
-          break;
-        case 3:
-          this.currentUser.levelString = "Student";
-          break;
-        default:
-          this.currentUser.levelString = "Invalid Account Configuration";
-          this.currentUser.level = 4;
-          break;
+  public login(email: string, password: string) {
+    this.socket = <Subject<Message>>this.webSocketService.connect().pipe(
+      map((response: MessageEvent) => {
+        // console.log(response);
+        let data = JSON.parse(response.data);
+        let message = {
+          error: "",
+          data: []
+        };
+        if(data.hasOwnProperty("error")) {
+          message.error = data["error"];
+        }
+        if(data.hasOwnProperty("data")) {
+          message.data = data["data"];
+        }
+        return <Message>message;
+      })
+    );
+    this.socket.subscribe((response) => {
+      console.log("[AuthenticationService] Received Response: ");
+      console.log(response);
+      if(response.error !== "") {
+        console.log("[AuthorizationService] " + response.error);
+        alert(response.error);
+        this.hasLoggedIn.next(false);
       }
-      //Now that the user has bee set, tell observers that the user has been logged in
-      this.hasLoggedIn.next(true);
+      else {
+        if(response.data.hasOwnProperty("authorized")) {    //Login info was sent
+          this.currentUser.authorized = response.data["authorized"];
+          this.currentUser.firstName = response.data["firstName"];
+          this.currentUser.lastName = response.data["lastName"];
+          this.currentUser.email = response.data["email"];
+          this.currentUser.uscID = response.data["uscID"];
+          this.currentUser.level = response.data["level"];
+          //Tell observers that the user is now logged in
+          this.hasLoggedIn.next(true);
+        }
+      }
     });
+    setTimeout(() => {
+      // this.webSocketService.login("JWilford@usc.edu", "pass");
+      this.webSocketService.login(email, password);
+    }, 1000);
   }
 
   public logout() {
@@ -57,13 +78,18 @@ export class AuthenticationService {
     //Tell observers that the users is no longer logged in
     this.hasLoggedIn.next(false);
     //Reset the current user's data
-    this.currentUser = new class implements UserInterface {
-      email: string;
-      firstName: string;
-      lastName: string;
-      level: number;
-      levelString: string;
-      uscID: number;
-    };
+    this.currentUser = {
+      firstName: "",
+      lastName: "",
+      email: "",
+      uscID: 0,
+      level: 0,
+      authorized: false
+    }
   }
+}
+
+export interface Message {
+  error: string,
+  data: object
 }

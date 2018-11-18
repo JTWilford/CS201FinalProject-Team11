@@ -14,14 +14,11 @@ export class AppComponent implements OnInit{
   }
 
   ngOnInit() {
-    this.loginUser("jwilford@usc.edu", "password");
   }
 
   loadOnClick() {
     console.log("not much");
   }
 
-  loginUser(email: string, password: string) {
-    this.authorizationService.login(email, password);
-  }
+
 }

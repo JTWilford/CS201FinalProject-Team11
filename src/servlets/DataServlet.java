@@ -157,7 +157,7 @@ public class DataServlet extends HttpServlet {
 		}
 	}
 
-	public static void connect() {
+	private static void connect() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/Data?user=" + sqlusername + "&password="

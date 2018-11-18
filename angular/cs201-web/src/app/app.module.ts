@@ -1,8 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -17,10 +17,8 @@ import { CourseRosterComponent } from './component/course-roster/course-roster.c
 import { PageNotFoundComponent } from './component/page-not-found/page-not-found.component';
 import { ProfileComponent } from './component/profile/profile.component';
 import { CalendarComponent } from './component/calendar/calendar.component';
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
-import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 
 
 
@@ -53,6 +51,7 @@ import { SignUpComponent } from './component/sign-up/sign-up.component';
     HttpClientModule,
     BrowserAnimationsModule,
     CommonModule,
+    FormsModule,
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory

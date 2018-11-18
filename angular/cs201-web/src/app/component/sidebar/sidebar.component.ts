@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {AuthenticationService} from "../../services/authentication.service";
 
 @Component({
   selector: 'app-sidebar',
@@ -7,9 +8,22 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SidebarComponent implements OnInit {
 
-  constructor() { }
+  email: string;
+  pass: string;
+
+  isLoggedIn = false;
+
+  constructor(public authenticationService: AuthenticationService) { }
 
   ngOnInit() {
+    this.authenticationService.$loggedIn.subscribe((loggedIn) => {
+      this.isLoggedIn = loggedIn;
+    })
   }
 
+  loginUser() {
+    console.log("Logging in: " + this.email + "  " + this.pass);
+    this.authenticationService.login(this.email, this.pass);
+
+  }
 }

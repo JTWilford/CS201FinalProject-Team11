@@ -5,7 +5,7 @@ USE Data;
 
 
 CREATE TABLE Account (
-  uscID INT(11) PRIMARY KEY UNIQUE NOT NULL, # reference accounts on the site
+  uscID BIGINT(11) PRIMARY KEY UNIQUE NOT NULL, # reference accounts on the site
   firstName VARCHAR(30) NOT NULL, # user first name
   lastName VARCHAR(50) NOT NULL, # user last name
   email VARCHAR(50) UNIQUE NOT NULL, # user email address
@@ -81,10 +81,6 @@ CREATE TABLE Calendar (
   date VARCHAR(12) NOT NULL, # date of the event
   startTime VARCHAR(8) NOT NULL, # (HH:MM) start time of the event
   endTime VARCHAR(8) NOT NULL, # (HH:MM) end time of the event
-  participant INT(11), # uscID associated with the other participating user
-  isConfirmed BOOLEAN NOT NULL, # whether or not other participant has confirmed the event
-  isCourseEvent BOOLEAN NOT NULL, # whether or not the event is a course event on every calendar
-  FOREIGN KEY fk11(participant) REFERENCES Account(uscID)
 );
 
 CREATE TABLE Attendance (

@@ -4,5 +4,5 @@ export interface UserInterface {
   email: string;
   uscID: number;
   level: number;
-  levelString: string;
+  authorized: boolean;
 }

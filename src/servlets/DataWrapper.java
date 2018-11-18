@@ -4,6 +4,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class DataWrapper<E> {
-    String error = "";
-    List<E> data = new LinkedList<>();
+    public String error = "";
+    public List<E> data = new LinkedList<>();
 }
