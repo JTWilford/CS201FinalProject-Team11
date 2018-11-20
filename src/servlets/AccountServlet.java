@@ -37,6 +37,7 @@ public class AccountServlet extends HttpServlet {
     *       accountLevel: string
     * */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("[AccountServlet] In POST");
         PrintWriter pw = response.getWriter();
         //Add the access control header to the response
         response.setHeader("Access-Control-Allow-Origin", "*");
