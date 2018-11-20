@@ -36,7 +36,7 @@ export class CalendarComponent implements OnInit {
     {
       title: 'Peer Review #2',
       start: new Date(2018, 10, 19)
-    }
+    },
     {
       title: 'Complete Documentation',
       start: new Date(2018, 10, 25)
