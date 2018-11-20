@@ -14,18 +14,33 @@ export class CalendarComponent implements OnInit {
   view: string = 'month';
   shouldShow: boolean = false;
 
-
   viewDate: Date = new Date();
 
   events: CalendarEvent[] = [
     {
-      title: 'Click me',
-      start: new Date()
+      title: 'Testing Document',
+      start: new Date(2018, 10, 4)
     },
     {
-      title: 'Or click me',
-      start: new Date()
+      title: 'Peer Review #1',
+      start: new Date(2018, 10, 4)
+    },
+    {
+      title: 'Deployment Document',
+      start: new Date(2018, 10, 18)
+    },
+    {
+      title: 'Complete Code',
+      start: new Date(2018, 10, 19)
+    },
+    {
+      title: 'Peer Review #2',
+      start: new Date(2018, 10, 19)
     }
+    {
+      title: 'Complete Documentation',
+      start: new Date(2018, 10, 25)
+    },
   ];
 
 
