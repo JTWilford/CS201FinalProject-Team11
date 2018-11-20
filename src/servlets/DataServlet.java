@@ -87,10 +87,11 @@ public class DataServlet extends HttpServlet {
 					break;
 				case "lab":		// Retrieves all the lab information in the Labs database
 					List<Lab> labs = new ArrayList<>();
-					ps = conn.prepareStatement("SELECT number, labDate, labTopics, pdfLink, additionalFiles FROM Labs");
+					ps = conn.prepareStatement("SELECT number, title, labDate, labTopics, pdfLink, additionalFiles FROM Labs");
 					rs = ps.executeQuery();
 					while (rs.next()) {
 						Lab lab = new Lab();
+						lab.title = rs.getString("title");
 						lab.number = rs.getInt("number");
 						lab.labDate = rs.getString("labDate");
 						lab.labTopics = rs.getString("labTopics");
@@ -212,6 +213,7 @@ class Assignment {
 
 class Lab {
 	int number; // lab number 
+	String title;
 	String labDate; // lab date 
 	String labTopics; // lab topics 
 	int pdfLink; // link to the lab description pdf 
