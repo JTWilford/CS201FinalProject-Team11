@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
 
 @Injectable({
@@ -46,15 +46,15 @@ export class HttpRequestService {
   }
   createAccount(email: string, password: string, firstName: string, lastName: string, uscID: number, gitHub: string): Observable<any> {
     console.log("Creating new account");
-    return this.http.post(`${this.backendUrl}/Accounts`, "", {params: {
-        email: email,
-        password: password,
-        firstName: firstName,
-        lastName: lastName,
-        uscID: uscID,
-        gitHub: gitHub,
-        accountLevel: "Student"   //Can only make student accounts through web interface
-      }});
+    let params = new HttpParams();
+    params.set("email", email);
+    params.set("password", password);
+    params.set("firstName", firstName);
+    params.set("lastName", lastName);
+    params.set("uscID", uscID + "");
+    params.set("gitHub", gitHub);
+    params.set("accountLevel", "Student");
+    return this.http.post(`${this.backendUrl}/Accounts`, "", {params: params});
   }
   updateAccount() {
 
