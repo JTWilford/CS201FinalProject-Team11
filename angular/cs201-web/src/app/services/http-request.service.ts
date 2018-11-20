@@ -38,14 +38,24 @@ export class HttpRequestService {
   //  Account System Requests
   //--------------------------------------------------------------------------------------------------------------------
   loginAccount(email: string, password: string): Observable<any>{
-    return this.http.get(this.backendUrl + "Accounts");
+    return this.http.get(this.backendUrl + "/Accounts");
   }
   //Should return all the data from the Accounts servlet, if the user's level is high enough
   searchAccount() {
 
   }
-  createAccount(email: string, password: string, firstName: string, lastName: string, uscID: number, accountLevel: string) {
-
+  createAccount(email: string, password: string, firstName: string, lastName: string, uscID: number, gitHub: string) {
+    let options = {
+      params: {
+        email: email,
+        password: password,
+        firstName: firstName,
+        lastName: lastName,
+        uscID: uscID,
+        gitHub: gitHub,
+        accountLevel: "Student"   //Can only make student accounts through web interface
+      }
+    }
   }
   updateAccount() {
 
@@ -64,7 +74,7 @@ export class HttpRequestService {
   getAttendance() {
 
   }
-  postAttendance() {
-
+  postAttendance(latitude: string, longitude: string) {
+    return this.http.post(this.backendUrl + "/Attendance", latitude + "," + longitude);
   }
 }
