@@ -46,8 +46,7 @@ export class HttpRequestService {
   }
   createAccount(email: string, password: string, firstName: string, lastName: string, uscID: number, gitHub: string): Observable<any> {
     console.log("Creating new account");
-    let options = {
-      params: {
+    return this.http.post(`${this.backendUrl}/Accounts`, "", {params: {
         email: email,
         password: password,
         firstName: firstName,
@@ -55,10 +54,7 @@ export class HttpRequestService {
         uscID: uscID,
         gitHub: gitHub,
         accountLevel: "Student"   //Can only make student accounts through web interface
-      }
-    };
-    console.log(options);
-    return this.http.post(`${this.backendUrl}/Accounts`, null, options);
+      }});
   }
   updateAccount() {
 

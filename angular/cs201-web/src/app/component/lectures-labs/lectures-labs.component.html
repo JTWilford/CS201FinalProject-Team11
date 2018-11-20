@@ -25,10 +25,10 @@
               <td><a [href]="row.programFiles.location">{{row.programFiles.display}}</a></td>
               <td>
                 <!--Generate a list of links for the additional files section-->
-                <ng-container *ngFor="let link of row.lectureSlides">
+                <!--ng-container *ngFor="let link of row.lectureSlides">
                   <a [href]="link.location">{{link.display}}</a>
                   <br />
-                </ng-container>
+                </ng-container-->
               </td>
             </tr>
           </ng-container>
@@ -64,10 +64,10 @@
               <td><a [href]="row.pdfLink.location">{{row.pdfLink.display}}</a></td>
               <td>
                 <!--Generate a list of links for the additional files section-->
-                <ng-container *ngFor="let link of row.additionalFiles">
+                <!--ng-container *ngFor="let link of row.additionalFiles">
                   <a [href]="link.location">{{link.display}}</a>
                   <br />
-                </ng-container>
+                </ng-container-->
               </td>
             </tr>
           </ng-container>

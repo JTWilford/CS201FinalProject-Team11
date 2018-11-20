@@ -20,13 +20,13 @@ import { CalendarComponent } from './component/calendar/calendar.component';
 import { CommonModule } from '@angular/common';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 
-
-
-
-
-
 import { HttpClientModule } from '@angular/common/http';
 import { SignUpComponent } from './component/sign-up/sign-up.component';
+import { LimitAccessDirective } from './directives/limit-access.directive';
+import {AuthenticationService} from "./services/authentication.service";
+import {HttpRequestService} from "./services/http-request.service";
+import {DataService} from "./services/data.service";
+import {WebsocketService} from "./services/websocket.service";
 
 @NgModule({
   declarations: [
@@ -43,6 +43,7 @@ import { SignUpComponent } from './component/sign-up/sign-up.component';
     CourseRosterComponent,
     PageNotFoundComponent,
     SignUpComponent,
+    LimitAccessDirective
 
   ],
   imports: [
@@ -57,7 +58,15 @@ import { SignUpComponent } from './component/sign-up/sign-up.component';
       useFactory: adapterFactory
     })
   ],
-  providers: [],
+  exports: [
+    LimitAccessDirective
+  ],
+  providers: [
+    AuthenticationService,
+    HttpRequestService,
+    DataService,
+    WebsocketService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -18,7 +18,7 @@
         <ng-container *ngIf="hasLoaded">
           <ng-container *ngFor="let row of exams">    <!--Dynamically generate the rows with a for loop-->
             <tr>
-              <td>{{row.date}}</td>
+              <td>{{row.examDate}}</td>
               <td>{{row.type}}</td>
               <td><a [href]="row.pdfLink.location">{{row.pdfLink.display}}</a></td>
               <td>

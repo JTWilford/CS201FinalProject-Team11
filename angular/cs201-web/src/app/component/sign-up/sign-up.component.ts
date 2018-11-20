@@ -36,7 +36,7 @@ export class SignUpComponent implements OnInit {
           alert("Account created successfully!");
           //Log the user in, then route to the home page
           this.authenticationService.login(this.email, this.password);
-          this.authenticationService.$loggedIn.subscribe((loggedin) => {
+          this.authenticationService.loggedIn$.subscribe((loggedin) => {
             this.router.navigate(["/home"]);
           })
         }

@@ -21,22 +21,22 @@
       <li>
         <a routerLink="/previous-exams" routerLinkActive="active">Previous Exams</a>
       </li>
-      <li>
+      <li *appLimitAccess="'student'">
         <a routerLink="/attendance" routerLinkActive="active">Attendance</a>
       </li>
-      <li>
+      <li *appLimitAccess="'ta/cp'">
         <a routerLink="/course-roster" routerLinkActive="active">Course Roster</a>
       </li>
       <li>
         <a href="https://cs.usc.edu" target="_blank">CS Department</a>
       </li>
-      <li>
+      <li *appLimitAccess="'student'">
         <a routerLink="/profile" routerLinkActive="active">Edit Profile</a>
       </li>
     </ul>
 
-    <ul class="list-unstyled CTAs" *ngIf="!hasLoggedIn">
-      <li>
+    <ul class="list-unstyled CTAs">
+      <li *ngIf="!loggedIn$">
         <div class="dropdown show">
           <a class="download dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Login
@@ -59,6 +59,11 @@
             <div class="dropdown-divider"></div>
             <a class="dropdown-item whitebg" routerLink="/signup" routerLinkActive="active">Sign up</a>
           </div>
+        </div>
+      </li>
+      <li *appLimitAccess="'student'">
+        <div class="col-md-8">
+          <input type="button" style="margin-right: 1vh;" class="btn" value="Logout" (click)="logout()">
         </div>
       </li>
 
