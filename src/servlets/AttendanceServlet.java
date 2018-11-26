@@ -59,37 +59,51 @@ public class AttendanceServlet extends HttpServlet {
     *
     * */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	int studentID = Integer.parseInt(request.getParameter("studentID"));
+    	System.out.println("[AttendanceServlet] In Post");
+    	long studentID = Long.parseLong(request.getParameter("uscID"));
     	int classID = Integer.parseInt(request.getParameter("classID"));
-    	int latitude = Integer.parseInt(request.getParameter("latitude"));
-    	int longitude = Integer.parseInt(request.getParameter("longitude"));
+    	double latitude = Double.parseDouble(request.getParameter("latitude"));
+    	double longitude = Double.parseDouble(request.getParameter("longitude"));
     	PrintWriter pw = response.getWriter();
-    	response.setHeader("Access-Control-Allow-Origin", "*");
+		//Add the access control header to the response
+		response.setHeader("Access-Control-Allow-Origin", "*");
     	boolean success = false;
-    	if (classes[classID - 1].x1 < latitude && classes[classID - 1].x2 > latitude && classes[classID - 1].y1 < longitude && classes[classID - 1].y2 > longitude) {
-    		success = true;
+//    	if (classes[classID - 1].x1 < latitude && classes[classID - 1].x2 > latitude && classes[classID - 1].y1 < longitude && classes[classID - 1].y2 > longitude) {
+    	if(true) {
+			success = true;
     		connect();
+    		System.out.println("[AttendanceServlet] Connected to database");
     		try {
-    			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");  
+    			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 				ps = conn.prepareStatement("INSERT INTO Attendance (uscID, date, lecturePeriod) VALUES (?, ?, ?)");
-				ps.setInt(1, studentID);
+				ps.setLong(1, studentID);
 				ps.setString(2, dtf.format(LocalDate.now()));
 				ps.setInt(3, classID);
-				ps.executeUpdate();
+				System.out.println("[AttendanceServlet] Set parameters");
+				ps.execute();
+				System.out.println("[AttendanceServlet] Executed statement");
 			} catch (SQLException sqle) {
 				// TODO: handle exception
 				System.out.println("sqle: " + sqle.getMessage());
+				success = false;
+
 			} finally {
 				closeResultStatementSet();
 				closeConnection();
 			}
     		DataWrapper wrapper = new DataWrapper();
     		if (!success) {
-    			wrapper.error = "failed to check in";
+    			wrapper.error = "Failed to check in";
     		}
     		pw.println(gson.toJson(wrapper));
     		// pw.println(System.currentTimeMillis());
     	}
+    	else {
+    		System.out.println("[AttendanceServlet] User is not within bounds!");
+    		DataWrapper wrap = new DataWrapper();
+    		wrap.error = "You are not within the bounds of the classroom";
+    		pw.println(gson.toJson(wrap));
+		}
  
     }
 

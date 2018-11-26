@@ -50,7 +50,7 @@ export class LimitAccessDirective {
       }
       else {
         this.authenticationService.userLevel$.subscribe((level) => {
-          else if (level <= required) {
+          if (level <= required) {
             console.log("[LimitAccess] User is authorized!");
             this.viewContainer.createEmbeddedView(this.templateRef);
           }

@@ -91,6 +91,10 @@ export class AuthenticationService {
     return this.hasLoggedIn.asObservable();
   }
 
+  public getID() {
+    return this.currentUser.uscID;
+  }
+
   public logout() {
     //TODO: Disconnect from the web socket
     //Tell observers that the users is no longer logged in

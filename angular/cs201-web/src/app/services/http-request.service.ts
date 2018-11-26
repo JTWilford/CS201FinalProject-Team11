@@ -85,7 +85,12 @@ export class HttpRequestService {
   getAttendance() {
 
   }
-  postAttendance(latitude: string, longitude: string) {
-    return this.http.post(this.backendUrl + "/Attendance", latitude + "," + longitude);
+  postAttendance(latitude: number, longitude: number, uscID: number) {
+    return this.http.post(this.backendUrl + "/Attendance", "", {params: {
+      "latitude": latitude.toString(),
+      "longitude": longitude.toString(),
+      "uscID": uscID.toString(),
+      "classID": "1"
+      }});
   }
 }
