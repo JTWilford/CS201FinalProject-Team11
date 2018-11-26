@@ -1,22 +1,40 @@
 <h2>Course Roster Search</h2>
 <p class="lead">Search by name, e-mail, or ID #.</p>
 <div class="input-group input-group-lg">
-  <input type="email" class="form-control" aria-label="Text input with segmented dropdown button">
+  <input type="email" class="form-control" aria-label="Text input with segmented dropdown button" [(ngModel)]="queryString">
   <div class="input-group-append">
-    <button type="button" class="btn btn-outline-success">Search</button>
+    <button type="button" class="btn btn-outline-success" (click)="searchAccounts()">Search</button>
   </div>
 </div>
-<table class="table smallTable">
-  <thead>
-  <tr>
-    <th scope="col">First</th>
-    <th scope="col">Last</th>
-    <th scope="col">E-mail</th>
-    <th scope="col">ID Number</th>
-    <th scope="col">Github</th>
+<div *ngIf="hasLoaded && hasData" style="text-align: center">
+  <h3><br />Search Results:</h3>
+  <table class="table smallTable">
+    <thead>
+    <tr>
+      <th scope="col">ID Number</th>
+      <th scope="col">First</th>
+      <th scope="col">Last</th>
+      <th scope="col">E-mail</th>
+      <th scope="col">Github</th>
+    </tr>
+    </thead>
+    <tbody>
+    <ng-container *ngIf="hasLoaded">
+      <ng-container *ngFor="let row of results">    <!--Dynamically generate the rows with a for loop-->
+        <tr>
+          <td>{{row.uscID}}</td>
+          <td>{{row.firstName}}</td>
+          <td>{{row.lastName}}</td>
+          <td>{{row.email}}</td>
+          <td>{{row.gitHub}}</td>
+        </tr>
+      </ng-container>
+    </ng-container>
+    </tbody>
 
-
-  </tr>
-  </thead>
-
-</table>
+  </table>
+</div>
+<h3 *ngIf="hasLoaded && !hasData">
+  <br />
+  Your search didn't return any results
+</h3>

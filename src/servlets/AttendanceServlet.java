@@ -123,7 +123,7 @@ public class AttendanceServlet extends HttpServlet {
     *
     * */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	int studentID = Integer.parseInt(request.getParameter("studentID"));
+    	int studentID = Integer.parseInt(request.getParameter("uscID"));
     	List<Record> records = new ArrayList<>();
     	PrintWriter pw = response.getWriter();
     	connect();

@@ -129,7 +129,50 @@ public class AccountServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("[AccountServlet] In GET");
+        PrintWriter pw = response.getWriter();
+        //Add the access control header to the response
+        response.setHeader("Access-Control-Allow-Origin", "*");
 
+        connect();
+
+        System.out.println("[AccountServlet] Parsing parameters");
+        String query = request.getParameter("query");
+        query = query.toLowerCase();
+        System.out.println("query: " + query);
+
+        try {
+            System.out.println("[AccountServlet] Searching accounts...");
+            ps = conn.prepareStatement("SELECT uscID, firstName, lastName, email, githubAccount FROM Account WHERE " +
+                    "uscID LIKE ? OR LOWER( firstName ) LIKE ? OR LOWER( lastName ) LIKE ? OR LOWER( email ) LIKE ?");
+            ps.setString(1, "%" + query + "%");
+            ps.setString(2, "%" + query + "%");
+            ps.setString(3, "%" + query + "%");
+            ps.setString(4, "%" + query + "%");
+
+            ps.execute();
+            rs = ps.getResultSet();
+            LinkedList<newUser> users = new LinkedList<>();
+            while(rs.next()) {
+                newUser temp = new newUser();
+                temp.uscID = rs.getLong("uscID");
+                temp.email = rs.getString("email");
+                temp.firstName = rs.getString("firstName");
+                temp.lastName = rs.getString("lastName");
+                temp.gitHub = rs.getString("githubAccount");
+
+                users.add(temp);
+            }
+
+            DataWrapper<newUser> wrap = new DataWrapper<>();
+            wrap.data = users;
+            pw.println(gson.toJson(wrap));
+        } catch (SQLException sqle) {
+            System.out.println("sqle: " + sqle.getMessage());
+            DataWrapper wrap = new DataWrapper();
+            wrap.error = "SQL Exception: " + sqle.getMessage();
+            pw.println(gson.toJson(wrap));
+        }
     }
 
     private static void connect() {
@@ -150,8 +193,7 @@ public class AccountServlet extends HttpServlet {
 class newUser {
     public long uscID;
     public String email;
-    public String password;
     public String firstName;
     public String lastName;
-    public String github;
+    public String gitHub;
 }

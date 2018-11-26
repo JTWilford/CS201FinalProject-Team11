@@ -41,22 +41,14 @@ export class HttpRequestService {
     return this.http.get(this.backendUrl + "/Accounts");
   }
   //Should return all the data from the Accounts servlet, if the user's level is high enough
-  searchAccount() {
-
+  searchAccount(query: string) {
+    console.log("Searching for accounts containing : " + query);
+    return this.http.get(this.backendUrl + "/Accounts", {params: {
+        "query": query
+      }});
   }
   createAccount(email: string, password: string, firstName: string, lastName: string, uscID: number, gitHub: string): Observable<any> {
     console.log("Creating new account");
-    console.log("uscID: " + uscID);
-    // let idstring: string = uscID.toS;
-    let params = new HttpParams();
-    params.set("email", email);
-    params.set("password", password);
-    params.set("firstName", firstName);
-    params.set("lastName", lastName);
-    params.set("uscID", uscID.toString());
-    params.set("gitHub", gitHub);
-    params.set("accountLevel", "Student");
-    console.log(params);
     return this.http.post(`${this.backendUrl}/Accounts`, "", {params:{
       "email": email,
       "password": password,
