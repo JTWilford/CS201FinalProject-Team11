@@ -99,6 +99,7 @@ INSERT INTO Account (uscID, firstName, lastName, email, password, githubAccount,
              (7237498374, "Yash", "Bhartia", "1010@usc.edu", "12345", "yash", 1),
              (2749273492, "Yang", "Li", "1234@usc.edu", "12345", "yang", 1),
              (7239498234, "Anav", "Batra", "123141@usc.edu", "12345", "anav", 2),
+             (1111111111, "Tommy", "Trojan", "ttrojan@usc.edu", "kanade", "github.usc.edu", 1)
              (4923749283, "Jeffrey", "Miller", "12412@usc.edu", "12345", "jeffrey", 3);
 
 INSERT INTO Assignments (number, title, gradePercent, assignedDate, dueDate, additionalFiles)
