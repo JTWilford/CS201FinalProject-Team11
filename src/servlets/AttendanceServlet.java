@@ -66,7 +66,7 @@ public class AttendanceServlet extends HttpServlet {
     	PrintWriter pw = response.getWriter();
     	response.setHeader("Access-Control-Allow-Origin", "*");
     	boolean success = false;
-    	if (classes[classID].x1 < latitude && classes[classID].x2 > latitude && classes[classID].y1 < longitude && classes[classID].y2 > longitude) {
+    	if (classes[classID - 1].x1 < latitude && classes[classID - 1].x2 > latitude && classes[classID - 1].y1 < longitude && classes[classID - 1].y2 > longitude) {
     		success = true;
     		connect();
     		try {
