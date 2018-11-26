@@ -36,21 +36,30 @@ export class LimitAccessDirective {
     }
     console.log("[LimitAccess] Required: " + access + " : " + required);
     if (access) {
-      this.authenticationService.userLevel$.subscribe((level) => {
-        if(absolute && level == required) {
-          console.log("[LimitAccess] Absolute Passed");
-          console.log(level + " : " + required);
-          this.viewContainer.createEmbeddedView(this.templateRef);
-        }
-        else if(level <= required) {
-          console.log("[LimitAccess] User is authorized!");
-          this.viewContainer.createEmbeddedView(this.templateRef);
-        }
-        else {
-          console.log("[LimitAccess] User is not authorized");
-          this.viewContainer.clear();
-        }
-      });
+      if(absolute) {
+        this.authenticationService.userLevel$.subscribe(((level) => {
+          if (level === required) {
+            console.log("[LimitAccess] User is (absolutely) authorized!");
+            this.viewContainer.createEmbeddedView(this.templateRef);
+          }
+          else {
+            console.log("[LimitAccess] User is not (absolutely) authorized");
+            this.viewContainer.clear();
+          }
+        }));
+      }
+      else {
+        this.authenticationService.userLevel$.subscribe((level) => {
+          else if (level <= required) {
+            console.log("[LimitAccess] User is authorized!");
+            this.viewContainer.createEmbeddedView(this.templateRef);
+          }
+          else {
+            console.log("[LimitAccess] User is not authorized");
+            this.viewContainer.clear();
+          }
+        });
+      }
     } else {
       console.log('[LimitAccess] Required privileges not set.');
       this.viewContainer.clear();

@@ -46,15 +46,27 @@ export class HttpRequestService {
   }
   createAccount(email: string, password: string, firstName: string, lastName: string, uscID: number, gitHub: string): Observable<any> {
     console.log("Creating new account");
+    console.log("uscID: " + uscID);
+    // let idstring: string = uscID.toS;
     let params = new HttpParams();
     params.set("email", email);
     params.set("password", password);
     params.set("firstName", firstName);
     params.set("lastName", lastName);
-    params.set("uscID", uscID + "");
+    params.set("uscID", uscID.toString());
     params.set("gitHub", gitHub);
     params.set("accountLevel", "Student");
-    return this.http.post(`${this.backendUrl}/Accounts`, "", {params: params});
+    console.log(params);
+    return this.http.post(`${this.backendUrl}/Accounts`, "", {params:{
+      "email": email,
+      "password": password,
+      "firstName": firstName,
+      "lastName": lastName,
+      "uscID": uscID.toString(),
+      "gitHub": gitHub,
+      "accountLevel": "Student"
+      }});
+    // return this.http.post(`${this.backendUrl}/Accounts`, "", {params: params});
   }
   updateAccount() {
 

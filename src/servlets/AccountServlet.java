@@ -44,15 +44,19 @@ public class AccountServlet extends HttpServlet {
 
         connect();
 
+        System.out.println("[AccountServlet] Parsing parameters");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
+        System.out.print("yeet");
         long uscID = Long.parseLong(request.getParameter("uscID"));
+        System.out.println("yote");
         String firstName = request.getParameter("firstName");
         String lastName = request.getParameter("lastName");
         String gitHub = request.getParameter("gitHub");
         String accountLevel = request.getParameter("accountLevel");
 
         //Error checking
+        System.out.println("[AccountServlet] Done parsing parameters");
         LinkedList<String> errors = new LinkedList<>();
         if(email == null || email.equals(""))
             errors.add("Email");
@@ -101,6 +105,7 @@ public class AccountServlet extends HttpServlet {
 
         //If no errors, then add a new entry into the SQL database
         try {
+            System.out.println("[AccountServlet] Pushing data...");
             ps = conn.prepareStatement("INSERT INTO " +
                     "Account (uscID, firstName, lastName, email, password, githubAccount, accountLevel)" +
                     "VALUES (?, ?, ?, ?, ?, ?, ?)");
