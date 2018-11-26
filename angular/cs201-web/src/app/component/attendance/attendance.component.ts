@@ -11,6 +11,7 @@ export class AttendanceComponent implements OnInit {
 
   shouldShow: boolean = false;
   private hasGeolocation = false;
+  private classSelection = 1;
 
   constructor(private authenticationService: AuthenticationService,
               private httpRequestService: HttpRequestService) { }
@@ -33,7 +34,7 @@ export class AttendanceComponent implements OnInit {
         console.log("longitude: " + position.coords.longitude);
 
         this.httpRequestService.postAttendance(position.coords.latitude, position.coords.longitude,
-                                                this.authenticationService.getID())
+                                                this.authenticationService.getID(), this.classSelection)
           .subscribe((response) => {
             console.log("Here's the response: ");
             console.log(response);

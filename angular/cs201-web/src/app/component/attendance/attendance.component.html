@@ -1,4 +1,11 @@
 <div class="buttonDiv">
+  <form name="classSelectForm">
+  <select class="form-control" style="margin-bottom: 1vh;" id="sel1" [(ngModel)]="classSelection" name="classSelector">
+    <option>T/TH 8:00 A.M.</option>
+    <option>T/TH 9:30 A.M.</option>
+    <option>T/TH 11:00 A.M.</option>
+  </select>
+  </form>
   <button (click)="getLocation()" type="button" class="btn btn-block btn-lg btn-success">Check In</button>
   <button (click)="toggleShow()" type="button" class="btn btn-block btn-lg">{{(shouldShow)?"Hide":"Show"}} Attendance History</button>
   <ng-container *ngIf="shouldShow">
