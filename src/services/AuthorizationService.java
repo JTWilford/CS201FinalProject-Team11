@@ -6,14 +6,13 @@ import servlets.DataWrapper;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
-import java.math.BigInteger;
 import java.sql.*;
 import java.util.Vector;
 
 @ServerEndpoint("/session")
 public class AuthorizationService {
     //A vector to store all active sessions
-    Vector<SessionInfo> sessions = new Vector<>();
+    Vector<SessionThread> sessions = new Vector<>();
     Gson gson = new Gson();
     private static final String sqlusername = "root";
     private static final String sqlpassword = "root";
@@ -25,15 +24,15 @@ public class AuthorizationService {
     @OnOpen
     public void open(Session session) {
         System.out.println("Connection!");
-        sessions.add(new SessionInfo(session));
-        try {
-            DataWrapper<String> wrap = new DataWrapper<>();
-            wrap.error = "";
-            wrap.data.add("Welcome to the party!");
-            session.getBasicRemote().sendText(gson.toJson(wrap));
-        } catch(IOException ioe) {
-            System.out.println("ioe: " + ioe.getMessage());
-        }
+        sessions.add(new SessionThread(session, new SessionInfo()));
+//        try {
+//            DataWrapper<String> wrap = new DataWrapper<>();
+//            wrap.error = "";
+//            wrap.data.add("Welcome to the party!");
+//            session.getBasicRemote().sendText(gson.toJson(wrap));
+//        } catch(IOException ioe) {
+//            System.out.println("ioe: " + ioe.getMessage());
+//        }
     }
 
     @OnMessage
@@ -74,22 +73,28 @@ public class AuthorizationService {
             ps.setString(2, password);
             rs = ps.executeQuery();
             if(rs.next()) {     //User found!
-                int i = 0;
-                for (; i < sessions.size(); i++) {
-                    if (sessions.get(i).session == session) {
-                        break;
+                //Find the current session thread
+                SessionThread curr = null;
+                for(SessionThread item : sessions) {
+                    if(item.session == session) {
+                        curr = item;
                     }
                 }
-                SessionInfo curr = sessions.get(i);
+                if(curr == null) {
+                    System.out.println("Session not found!!!");
+                    DataWrapper<SessionInfo> wrap = new DataWrapper<>();
+                    wrap.error = "General Exception: Theres something seriously wrong with the socket";
+                    return wrap;
+                }
 
-                curr.uscID = (rs.getLong("uscID"));
-                curr.firstName = rs.getString("firstName");
-                curr.lastName = rs.getString("lastName");
-                curr.email = rs.getString("email");
-                curr.level = rs.getInt("accountLevel");
-                curr.authorized = true;
+                curr.info.uscID = (rs.getLong("uscID"));
+                curr.info.firstName = rs.getString("firstName");
+                curr.info.lastName = rs.getString("lastName");
+                curr.info.email = rs.getString("email");
+                curr.info.level = rs.getInt("accountLevel");
+                curr.info.authorized = true;
                 DataWrapper<SessionInfo> wrap = new DataWrapper<>();
-                wrap.data.add(curr);
+                wrap.data.add(curr.info);
                 return wrap;
             }
             else {      //User not found
@@ -120,6 +125,46 @@ public class AuthorizationService {
         }
     }
 }
+class SessionThread extends Thread {
+//    private static final long TIMEOUT_MILLIS = 600000;       //10 minutes in milliseconds
+    private static final long TIMEOUT_MILLIS = 120000;      //2 minutes in milliseconds
+//    private static final long TIMEOUT_MILLIS = 6000;       //6 seconds in milliseconds
+
+    public Session session;
+    public SessionInfo info;
+    private long lastActivity = 0;
+    private Gson gson = new Gson();
+    private boolean isRunning = true;
+
+    public SessionThread(Session session, SessionInfo info) {
+        this.session = session;
+        this.info = info;
+        this.lastActivity = System.currentTimeMillis();
+        this.start();
+    }
+
+    public void updateActivity() {
+        this.lastActivity = System.currentTimeMillis();
+    }
+
+    public void run() {
+        while(isRunning) {
+            //Timeout has been reached
+            if (System.currentTimeMillis() - lastActivity >= TIMEOUT_MILLIS) {
+                System.out.println("[AuthenticationService] User \'" + this.info.email + "\' has timed out");
+                DataWrapper wrap = new DataWrapper();
+                wrap.error = "timeout";
+                try {
+                    this.session.getBasicRemote().sendText(gson.toJson(wrap));
+                } catch (IOException ioe) {
+                    System.out.println("ioe: " + ioe.getMessage());
+                } finally {
+                    this.isRunning = false;
+                }
+            }
+        }
+    }
+}
 
 //A class for holding session info
 class SessionInfo {
@@ -134,18 +179,14 @@ class SessionInfo {
     public String lastName;
     //User's permission level
     public int level;
-    //The user's Websocket Session
-    public transient Session session;
 
-    public SessionInfo(Session session) {
+    public SessionInfo() {
         this.authorized = false;
         this.uscID = 0;
         this.email = "";
         this.firstName = "";
         this.lastName = "";
         this.level = -1;
-        //Set the session
-        this.session = session;
     }
 }
 

@@ -61,7 +61,7 @@ export class AuthenticationService {
       if(response.error !== "") {
         console.log("[AuthorizationService] " + response.error);
         alert(response.error);
-        this.hasLoggedIn.next(false);
+        this.logout();
       }
       else {
         if(response.data[0].hasOwnProperty("authorized")) {    //Login info was sent
@@ -80,6 +80,8 @@ export class AuthenticationService {
           console.log("no authorized");
         }
       }
+    }, null, () => {
+      this.socket.unsubscribe();
     });
     setTimeout(() => {
       // this.webSocketService.login("JWilford@usc.edu", "pass");
@@ -97,6 +99,7 @@ export class AuthenticationService {
 
   public logout() {
     //TODO: Disconnect from the web socket
+    this.webSocketService.disconnect();
     //Tell observers that the users is no longer logged in
     this.hasLoggedIn.next(false);
     this.userLevel.next(4);

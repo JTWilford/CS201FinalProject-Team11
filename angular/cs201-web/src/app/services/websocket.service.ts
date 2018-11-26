@@ -15,11 +15,14 @@ export class WebsocketService {
   public $connected: Observable<boolean> = this.hasConnected.asObservable();
 
   public connect(url = "ws://localhost:8080/session"): Subject<MessageEvent> {
-    if (!this.subject) {
-      this.subject = this.create(url);
-      console.log("Successfully connected: " + url);
-      this.hasConnected.next(true);
+    if (this.subject) {
+      this.disconnect();
+      this.subject = null;
     }
+
+    this.subject = this.create(url);
+    console.log("Successfully connected: " + url);
+    this.hasConnected.next(true);
     return this.subject;
   }
 
@@ -55,5 +58,15 @@ export class WebsocketService {
       };
       this.ws.send(JSON.stringify(loginInfo));
     }
+  }
+
+  public disconnect() {
+    if(this.ws) {
+      this.ws.close();
+    }
+    if(this.subject) {
+      this.subject.complete();
+    }
+    this.hasConnected.next(false);
   }
 }
