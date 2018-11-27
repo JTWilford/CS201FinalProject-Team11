@@ -1,9 +1,9 @@
 <div class="buttonDiv">
   <form name="classSelectForm">
   <select class="form-control" style="margin-bottom: 1vh;" id="sel1" [(ngModel)]="classSelection" name="classSelector">
-    <option>T/TH 8:00 A.M.</option>
-    <option>T/TH 9:30 A.M.</option>
-    <option>T/TH 11:00 A.M.</option>
+    <option value="1">T/TH 8:00 A.M.</option>
+    <option value="2">T/TH 9:30 A.M.</option>
+    <option value="3">T/TH 11:00 A.M.</option>
   </select>
   </form>
   <button (click)="getLocation()" type="button" class="btn btn-block btn-lg btn-success">Check In</button>
@@ -13,27 +13,17 @@
         <table id="datatable" class="table datatable">
           <thead>
           <tr>
-            <th scope="col">Class #</th>
             <th scope="col">Date</th>
-            <th scope="col">Attendance</th>
+            <th scope="col">Class Attended</th>
           </tr>
           </thead>
           <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>August 17</td>
-            <td class="present">Present</td>
-          </tr>
-          <tr>
-            <th scope="row">2</th>
-            <td>August 19</td>
-            <td class="absent">Absent</td>
-          </tr>
-          <tr>
-            <th scope="row">3</th>
-            <td>August 24</td>
-            <td class="present">Present</td>
-          </tr>
+          <ng-container *ngFor="let row of entries">    <!--Dynamically generate the rows with a for loop-->
+            <tr>
+              <td>{{row.date}}</td>
+              <td>{{getPeriod(row.lecturePeriod)}}</td>
+            </tr>
+          </ng-container>
           </tbody>
         </table>
       </div>

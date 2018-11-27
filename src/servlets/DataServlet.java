@@ -1,6 +1,8 @@
 package servlets;
 
 import com.google.gson.Gson;
+import services.ResponseSetup;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -51,7 +53,7 @@ public class DataServlet extends HttpServlet {
 		connect();
 		PrintWriter pw = response.getWriter();
 		//Add the access control header to the response
-		response.setHeader("Access-Control-Allow-Origin", "*");
+		ResponseSetup.fixOptions(response);
 
 		if (FileType == null) {
 			//pw.println("Error: please specify a file type");
@@ -197,6 +199,14 @@ public class DataServlet extends HttpServlet {
 			System.out.print("connection close error");
 			sqle.printStackTrace();
 		}
+	}
+
+	//for Preflight
+	@Override
+	protected void doOptions(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		System.out.println("[AttendanceServlet] In Options");
+		ResponseSetup.fixOptions(resp);
 	}
 }
 

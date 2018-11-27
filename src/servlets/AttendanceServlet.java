@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 import com.mysql.fabric.RangeShardMapping;
 import com.sun.beans.editors.IntegerEditor;
+import services.ResponseSetup;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -66,7 +67,7 @@ public class AttendanceServlet extends HttpServlet {
     	double longitude = Double.parseDouble(request.getParameter("longitude"));
     	PrintWriter pw = response.getWriter();
 		//Add the access control header to the response
-		response.setHeader("Access-Control-Allow-Origin", "*");
+		ResponseSetup.fixOptions(response);
     	boolean success = false;
 //    	if (classes[classID - 1].x1 < latitude && classes[classID - 1].x2 > latitude && classes[classID - 1].y1 < longitude && classes[classID - 1].y2 > longitude) {
     	if(true) {
@@ -123,14 +124,19 @@ public class AttendanceServlet extends HttpServlet {
     *
     * */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	int studentID = Integer.parseInt(request.getParameter("uscID"));
+		System.out.println("[AttendanceServlet] In Get");
+    	long studentID = Long.parseLong(request.getParameter("uscID"));
     	List<Record> records = new ArrayList<>();
     	PrintWriter pw = response.getWriter();
     	connect();
+
+		//Add the access control header to the response
+//		response.setHeader("Access-Control-Allow-Origin", "*");
+		ResponseSetup.fixOptions(response);
     	
     	try {
 			ps = conn.prepareStatement("SELECT date, lecturePeriod FROM Attendance WHERE uscID=?");
-			ps.setInt(1, studentID);
+			ps.setLong(1, studentID);
 			rs = ps.executeQuery();
 			while (rs.next()) {
 				Record record = new Record();
@@ -194,6 +200,14 @@ public class AttendanceServlet extends HttpServlet {
 			System.out.print("connection close error");
 			sqle.printStackTrace();
 		}
+	}
+
+	//for Preflight
+	@Override
+	protected void doOptions(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+    	System.out.println("[AttendanceServlet] In Options");
+		ResponseSetup.fixOptions(resp);
 	}
 }
 

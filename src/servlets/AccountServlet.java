@@ -1,6 +1,7 @@
 package servlets;
 
 import com.google.gson.Gson;
+import services.ResponseSetup;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -40,7 +41,7 @@ public class AccountServlet extends HttpServlet {
         System.out.println("[AccountServlet] In POST");
         PrintWriter pw = response.getWriter();
         //Add the access control header to the response
-        response.setHeader("Access-Control-Allow-Origin", "*");
+        ResponseSetup.fixOptions(response);
 
         connect();
 
@@ -132,7 +133,7 @@ public class AccountServlet extends HttpServlet {
         System.out.println("[AccountServlet] In GET");
         PrintWriter pw = response.getWriter();
         //Add the access control header to the response
-        response.setHeader("Access-Control-Allow-Origin", "*");
+        ResponseSetup.fixOptions(response);
 
         connect();
 
@@ -188,6 +189,14 @@ public class AccountServlet extends HttpServlet {
             e.printStackTrace();
         }
     } // function to connect to the server
+
+    //for Preflight
+    @Override
+    protected void doOptions(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+        System.out.println("[AttendanceServlet] In Options");
+        ResponseSetup.fixOptions(resp);
+    }
 }
 
 class newUser {

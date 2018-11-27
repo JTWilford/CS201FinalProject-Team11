@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {AuthenticationService} from "../../services/authentication.service";
 import {HttpRequestService} from "../../services/http-request.service";
+import {Attendance} from "../../interfaces/attendance.interface";
 
 @Component({
   selector: 'app-attendance',
@@ -12,6 +13,7 @@ export class AttendanceComponent implements OnInit {
   shouldShow: boolean = false;
   private hasGeolocation = false;
   private classSelection = 1;
+  private entries: Attendance[];
 
   constructor(private authenticationService: AuthenticationService,
               private httpRequestService: HttpRequestService) { }
@@ -42,9 +44,13 @@ export class AttendanceComponent implements OnInit {
               if(response["error"] !== "") {
                 alert("Check-in was unsuccessful: \n" + response["error"]);
               }
+              else {
+                alert("Check-in was successful!");
+                this.getAttendance();
+              }
             }
             else {
-              alert("Check-in was successful!");
+              alert("There was an unexpected response");
             }
         });
       });
@@ -57,6 +63,40 @@ export class AttendanceComponent implements OnInit {
 
   toggleShow() {
     this.shouldShow = !this.shouldShow;
+    if(this.shouldShow) {
+      this.getAttendance();
+    }
+  }
+
+  getAttendance() {
+    this.httpRequestService.getAttendance(this.authenticationService.getID()).subscribe((response) => {
+      if(response.hasOwnProperty("error")) {
+        if(response["error"] !== "") {
+          alert("There was an error retrieving attendance: " + response["error"]);
+        }
+        else {
+          this.entries = response["data"];
+          console.log(this.entries);
+        }
+      }
+    });
+  }
+
+  getPeriod(id: number) {
+    switch (id) {
+      case 1:
+        return "T/TH 8:00 A.M.";
+        break;
+      case 2:
+        return "T/TH 9:30 A.M.";
+        break;
+      case 3:
+        return "T/TH 11:00 A.M.";
+        break;
+      default:
+        return "Invalid class";
+        break;
+    }
   }
 
 }

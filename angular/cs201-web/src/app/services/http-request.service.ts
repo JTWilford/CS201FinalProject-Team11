@@ -74,11 +74,16 @@ export class HttpRequestService {
   //--------------------------------------------------------------------------------------------------------------------
   //  Attendance System Requests
   //--------------------------------------------------------------------------------------------------------------------
-  getAttendance() {
-
+  getAttendance(uscID: number) {
+    return this.http.get(this.backendUrl + "/Attendance", {
+      params: {
+          uscID: uscID.toString()
+        }
+      });
   }
   postAttendance(latitude: number, longitude: number, uscID: number, classID: number) {
-    return this.http.post(this.backendUrl + "/Attendance", "", {params: {
+    return this.http.post(this.backendUrl + "/Attendance", "", {
+      params: {
       "latitude": latitude.toString(),
       "longitude": longitude.toString(),
       "uscID": uscID.toString(),

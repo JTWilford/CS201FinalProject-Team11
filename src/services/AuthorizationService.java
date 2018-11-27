@@ -126,8 +126,8 @@ public class AuthorizationService {
     }
 }
 class SessionThread extends Thread {
-//    private static final long TIMEOUT_MILLIS = 600000;       //10 minutes in milliseconds
-    private static final long TIMEOUT_MILLIS = 120000;      //2 minutes in milliseconds
+    private static final long TIMEOUT_MILLIS = 600000;       //10 minutes in milliseconds
+//    private static final long TIMEOUT_MILLIS = 120000;      //2 minutes in milliseconds
 //    private static final long TIMEOUT_MILLIS = 6000;       //6 seconds in milliseconds
 
     public Session session;
@@ -150,10 +150,14 @@ class SessionThread extends Thread {
     public void run() {
         while(isRunning) {
             //Timeout has been reached
-            if (System.currentTimeMillis() - lastActivity >= TIMEOUT_MILLIS) {
+            long timeout = TIMEOUT_MILLIS;
+            if(this.info.email.equals("timeout@usc.edu")) {
+                timeout = 6000;
+            }
+            if (System.currentTimeMillis() - lastActivity >= timeout) {
                 System.out.println("[AuthenticationService] User \'" + this.info.email + "\' has timed out");
                 DataWrapper wrap = new DataWrapper();
-                wrap.error = "timeout";
+                wrap.error = "You have been logged out due to inactivity";
                 try {
                     this.session.getBasicRemote().sendText(gson.toJson(wrap));
                 } catch (IOException ioe) {
