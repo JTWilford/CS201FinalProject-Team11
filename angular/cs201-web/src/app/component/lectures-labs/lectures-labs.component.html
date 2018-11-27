@@ -9,26 +9,30 @@
         <tr>
           <th scope="col">Lecture #</th>
           <th scope="col">Lecture Date</th>
-          <th scope="col">Lecture Topics</th>
           <th scope="col">Lecture Slides</th>
           <th scope="col">Program Files</th>
 
         </tr>
         </thead>
         <tbody>
-        <ng-container *ngIf="hasLoaded">
+        <ng-container *ngIf="hasLoadedLectures">
           <ng-container *ngFor="let row of lectures">    <!--Dynamically generate the rows with a for loop-->
             <tr>
               <th scope="row">{{row.number}}</th>
               <td>{{row.lectureDate}}</td>
-              <td>{{row.lectureTopic}}</td>
-              <td><a [href]="row.programFiles.location">{{row.programFiles.display}}</a></td>
               <td>
                 <!--Generate a list of links for the additional files section-->
-                <!--ng-container *ngFor="let link of row.lectureSlides">
-                  <a [href]="link.location">{{link.display}}</a>
+                <ng-container *ngFor="let link of row.lectureSlides">
+                  <a [href]="link.href">{{link.display}}</a>
                   <br />
-                </ng-container-->
+                </ng-container>
+              </td>
+              <td>
+                <!--Generate a list of links for the additional files section-->
+                <ng-container *ngFor="let link of row.programFiles">
+                  <a [href]="link.href">{{link.display}}</a>
+                  <br />
+                </ng-container>
               </td>
             </tr>
           </ng-container>
@@ -49,25 +53,27 @@
         <tr>
           <th scope="col">Lab #</th>
           <th scope="col">Lab Date</th>
-          <th scope="col">Lab Topics</th>
-          <th scope="col">PDF Link</th>
+          <th scope="col">Title</th>
+          <th scope="col">Description</th>
+          <th scope="col">Solution</th>
           <th scope="col">Additional Files</th>
         </tr>
         </thead>
         <tbody>
-        <ng-container *ngIf="hasLoaded">
+        <ng-container *ngIf="hasLoadedLabs">
           <ng-container *ngFor="let row of labs">    <!--Dynamically generate the rows with a for loop-->
             <tr>
               <th scope="row">{{row.number}}</th>
               <td>{{row.labDate}}</td>
-              <td>{{row.labTopics}}</td>
-              <td><a [href]="row.pdfLink.location">{{row.pdfLink.display}}</a></td>
+              <td>{{row.title}}</td>
+              <td><a *ngIf="row.pdfLink" [href]="row.pdfLink.href">{{row.pdfLink.display}}</a></td>
+              <td><a *ngIf="row.solutionLink" [href]="row.solutionLink.href">{{row.solutionLink.display}}</a></td>
               <td>
                 <!--Generate a list of links for the additional files section-->
-                <!--ng-container *ngFor="let link of row.additionalFiles">
-                  <a [href]="link.location">{{link.display}}</a>
+                <ng-container *ngFor="let link of row.additionalFiles">
+                  <a [href]="link.href">{{link.display}}</a>
                   <br />
-                </ng-container-->
+                </ng-container>
               </td>
             </tr>
           </ng-container>

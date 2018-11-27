@@ -14,23 +14,25 @@ export class LecturesLabsComponent implements OnInit {
 
   constructor(private dataService: DataService) { }
 
-  hasLoaded = false;
+  hasLoadedLectures = false;
+  hasLoadedLabs = false;
   labs: Lab[];
   lectures: Lecture[];
 
   ngOnInit() {
-    this.hasLoaded = false;
+    this.hasLoadedLectures = false;
+    this.hasLoadedLabs = false;
     this.dataService.getLectures().then((response) => {
       console.log("[LectureComponent] Received Data");
       this.lectures = response;
       console.log(this.lectures);
-      this.hasLoaded = true;
-    })
+      this.hasLoadedLectures = true;
+    });
     this.dataService.getLabs().then((response) => {
       console.log("[LabComponent] Received Data");
       this.labs = response;
       console.log(this.labs);
-      this.hasLoaded = true;
+      this.hasLoadedLabs = true;
     })
   }
 

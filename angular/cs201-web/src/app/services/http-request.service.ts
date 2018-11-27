@@ -14,7 +14,7 @@ export class HttpRequestService {
   //--------------------------------------------------------------------------------------------------------------------
   //  Data/Table System Requests
   //--------------------------------------------------------------------------------------------------------------------
-  getAssignmentData(): Observable<any>{
+  getAssignmentData() {
     return this.getData("assignment");
   }
 
@@ -30,7 +30,7 @@ export class HttpRequestService {
     return this.getData("exam");
   }
 
-  private getData(type: string): Observable<any> {
+  private getData(type: string) {
     return this.http.get(`${this.backendUrl}/Data`, {params: {FileType:type}});
   }
 

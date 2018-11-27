@@ -1,6 +1,7 @@
 package servlets;
 
 import com.google.gson.Gson;
+import services.LinksService;
 import services.ResponseSetup;
 
 import javax.servlet.ServletException;
@@ -19,6 +20,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+
+import services.Link;
 
 @WebServlet(
 		name = "DataServlet",
@@ -47,7 +50,7 @@ public class DataServlet extends HttpServlet {
 		Debug("This is a test. We're in POST");
 	}
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected synchronized void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Debug("This is a test. We're in GET");
 		String FileType = request.getParameter("FileType");
 		connect();
@@ -77,9 +80,16 @@ public class DataServlet extends HttpServlet {
 						assignment.gradePercent = rs.getFloat("gradePercent");
 						assignment.assignedDate = rs.getString("assignedDate");
 						assignment.dueDate = rs.getString("dueDate");
-						assignment.pdfLink = rs.getInt("pdfLink");
-						assignment.additionalFiles = rs.getBoolean("additionalFiles");
-						assignment.solutionLink = rs.getInt("solutionLink");
+						//Get the links
+						assignment.pdfLink = LinksService.getLink(rs.getInt("pdfLink"));
+						assignment.solutionLink = LinksService.getLink(rs.getInt("solutionLink"));
+						LinkedList<Integer> additional = new LinkedList<>();
+						String[] rawAddIDs = rs.getString("additionalFiles").split(",");
+						for(String item : rawAddIDs) {
+							additional.add(Integer.parseInt(item));
+						}
+						assignment.additionalFiles = LinksService.getLinks(additional);
+
 						assignments.add(assignment);
 					}
 					//Insert into the data wrapper
@@ -89,16 +99,23 @@ public class DataServlet extends HttpServlet {
 					break;
 				case "lab":		// Retrieves all the lab information in the Labs database
 					List<Lab> labs = new ArrayList<>();
-					ps = conn.prepareStatement("SELECT number, title, labDate, labTopics, pdfLink, additionalFiles FROM Labs");
+					ps = conn.prepareStatement("SELECT number, title, labDate, pdfLink, solutionLink, additionalFiles FROM Labs");
 					rs = ps.executeQuery();
 					while (rs.next()) {
 						Lab lab = new Lab();
 						lab.title = rs.getString("title");
 						lab.number = rs.getInt("number");
 						lab.labDate = rs.getString("labDate");
-						lab.labTopics = rs.getString("labTopics");
-						lab.pdfLink = rs.getInt("pdfLink");
-						lab.additionalFiles = rs.getBoolean("additionalFiles");
+						//Get the links
+						lab.pdfLink = LinksService.getLink(rs.getInt("pdfLink"));
+						lab.solutionLink = LinksService.getLink(rs.getInt("solutionLink"));
+						LinkedList<Integer> additional = new LinkedList<>();
+						String[] rawAddIDs = rs.getString("additionalFiles").split(",");
+						for(String item : rawAddIDs) {
+							if(!item.equals(""))
+								additional.add(Integer.parseInt(item));
+						}
+						lab.additionalFiles = LinksService.getLinks(additional);
 						labs.add(lab);
 					}
 					//Insert into the data wrapper
@@ -108,16 +125,33 @@ public class DataServlet extends HttpServlet {
 					break;
 				case "lecture":		// Retrieves all the lecture information in the Lectures database
 					List<Lecture> lectures = new ArrayList<>();
-					ps = conn.prepareStatement("SELECT number, lectureDate, lectureTopics, chapters, lectureSlides, programsLinks FROM Lectures");
+					ps = conn.prepareStatement("SELECT number, lectureDate, chapters, lectureSlides, programsLinks FROM Lectures");
 					rs = ps.executeQuery();
 					while (rs.next()) {
 						Lecture lecture = new Lecture();
 						lecture.number = rs.getInt("number");
 						lecture.lectureDate = rs.getString("lectureDate");
-						lecture.lectureTopics = rs.getString("lectureTopics");
 						lecture.chapters = rs.getString("chapters");
-						lecture.lectureSlides = rs.getBoolean("lectureSlides");
-						lecture.programFiles = rs.getInt("programsLinks");
+						//Get the links
+						LinkedList<Integer> progs = new LinkedList<>();
+						if(rs.getString("programsLinks") != null) {
+							String[] rawAddIDs = rs.getString("programsLinks").split(",");
+							for (String item : rawAddIDs) {
+								if(!item.equals(""))
+									progs.add(Integer.parseInt(item));
+							}
+							lecture.programFiles = LinksService.getLinks(progs);
+						}
+
+						LinkedList<Integer> additional = new LinkedList<>();
+						if(rs.getString("lectureSlides") != null) {
+							String[] rawAddIDs = rs.getString("lectureSlides").split(",");
+							for (String item : rawAddIDs) {
+								if(!item.equals(""))
+									additional.add(Integer.parseInt(item));
+							}
+							lecture.lectureSlides = LinksService.getLinks(additional);
+						}
 						lectures.add(lecture);
 					}
 					//Insert into the data wrapper
@@ -133,8 +167,15 @@ public class DataServlet extends HttpServlet {
 						Exam exam = new Exam();
 						exam.examDate = rs.getString("examDate");
 						exam.type = rs.getString("type");
-						exam.pdfLink = rs.getInt("pdfLink");
-						exam.solutions = rs.getBoolean("solutions");
+						//Get the links
+						exam.pdfLink = LinksService.getLink(rs.getInt("pdfLink"));
+						LinkedList<Integer> additional = new LinkedList<>();
+						String[] rawAddIDs = rs.getString("solutions").split(",");
+						for(String item : rawAddIDs) {
+							if(!item.equals(""))
+								additional.add(Integer.parseInt(item));
+						}
+						exam.solutions = LinksService.getLinks(additional);
 						exams.add(exam);
 					}
 					//Insert into the data wrapper
@@ -216,32 +257,31 @@ class Assignment {
 	float gradePercent; // final grade percent
 	String assignedDate; // assigned date
 	String dueDate; // due date 
-	int pdfLink; // link to the assignment's pdf
-	int solutionLink; // link to the solution 
-	boolean additionalFiles; // link to any additional files (can be empty)
+	Link pdfLink; // link to the assignment's pdf
+	Link solutionLink; // link to the solution
+	LinkedList<Link> additionalFiles; // link to any additional files (can be empty)
 }
 
 class Lab {
 	int number; // lab number 
 	String title;
-	String labDate; // lab date 
-	String labTopics; // lab topics 
-	int pdfLink; // link to the lab description pdf 
-	boolean additionalFiles; // link to any additional files for the lab (can be empty)
+	String labDate; // lab date
+	Link pdfLink; // link to the lab description pdf
+	Link solutionLink; // link to the lab description pdf
+	LinkedList<Link> additionalFiles; // link to any additional files for the lab (can be empty)
 }
 
 class Lecture {
 	int number; // lecture number 
-	String lectureDate; // lecture date 
-	String lectureTopics; // lecture topics
+	String lectureDate; // lecture date
 	String chapters; // chapter numbers 
-	boolean lectureSlides; // link to lecture slides 
-	int programFiles; // links to demos/programs/git repo (can be empty)
+	LinkedList<Link> lectureSlides; // link to lecture slides
+	LinkedList<Link> programFiles; // links to demos/programs/git repo (can be empty)
 }
 
 class Exam {
 	String examDate; // the period of the exam is given
 	String type; // whether or not the exam was written or programming 
-	int pdfLink; // the link to pdf of the exam
-	boolean solutions; // links to the solutions 
+	Link pdfLink; // the link to pdf of the exam
+	LinkedList<Link> solutions; // links to the solutions
 }

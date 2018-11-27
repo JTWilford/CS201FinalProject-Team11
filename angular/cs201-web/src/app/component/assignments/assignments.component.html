@@ -22,16 +22,16 @@
               <th scope="row">{{row.number}}</th>
               <td>{{row.assignedDate}}</td>
               <td>{{row.dueDate}}</td>
-              <td><a [href]="row.pdfLink.location">{{row.pdfLink.display}}</a></td>
+              <td><a *ngIf="row.pdfLink" [href]="row.pdfLink.href">{{row.pdfLink.display}}</a></td>
               <td>{{row.gradePercent}}%</td>
               <td>
                 <!--Generate a list of links for the additional files section-->
-                <ng-container *ngFor="let link of row.additionalLinks">
-                  <a [href]="link.location">{{link.display}}</a>
+                <ng-container *ngFor="let link of row.additionalFiles">
+                  <a [href]="link.href">{{link.display}}</a>
                   <br />
                 </ng-container>
               </td>
-              <td><a [href]="row.solutionLink.location">{{row.solutionLink.display}}</a></td>
+              <td><a *ngIf="row.solutionLink" [href]="row.solutionLink.href">{{row.solutionLink.display}}</a></td>
             </tr>
           </ng-container>
         </ng-container>

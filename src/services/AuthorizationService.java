@@ -24,7 +24,9 @@ public class AuthorizationService {
     @OnOpen
     public void open(Session session) {
         System.out.println("Connection!");
-        sessions.add(new SessionThread(session, new SessionInfo()));
+        SessionThread sess = new SessionThread(session, new SessionInfo());
+        sess.start();
+        sessions.add(sess);
 //        try {
 //            DataWrapper<String> wrap = new DataWrapper<>();
 //            wrap.error = "";
@@ -140,7 +142,6 @@ class SessionThread extends Thread {
         this.session = session;
         this.info = info;
         this.lastActivity = System.currentTimeMillis();
-        this.start();
     }
 
     public void updateActivity() {
@@ -151,7 +152,8 @@ class SessionThread extends Thread {
         while(isRunning) {
             //Timeout has been reached
             long timeout = TIMEOUT_MILLIS;
-            if(this.info.email.equals("timeout@usc.edu")) {
+            if(this.info.email.contains("timeout")) {
+//                System.out.println("Timeout account found");
                 timeout = 6000;
             }
             if (System.currentTimeMillis() - lastActivity >= timeout) {
@@ -166,6 +168,8 @@ class SessionThread extends Thread {
                     this.isRunning = false;
                 }
             }
+//            System.out.println("[THREAD] yielding");
+            Thread.yield();
         }
     }
 }
