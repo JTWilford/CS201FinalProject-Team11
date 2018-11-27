@@ -69,8 +69,8 @@ public class AttendanceServlet extends HttpServlet {
 		//Add the access control header to the response
 		ResponseSetup.fixOptions(response);
     	boolean success = false;
-//    	if (classes[classID - 1].x1 < latitude && classes[classID - 1].x2 > latitude && classes[classID - 1].y1 < longitude && classes[classID - 1].y2 > longitude) {
-    	if(true) {
+    	if ((classID == 3) || (classes[classID - 1].x1 < latitude && classes[classID - 1].x2 > latitude && classes[classID - 1].y1 < longitude && classes[classID - 1].y2 > longitude)) {
+//    	if(true) {
 			success = true;
     		connect();
     		System.out.println("[AttendanceServlet] Connected to database");

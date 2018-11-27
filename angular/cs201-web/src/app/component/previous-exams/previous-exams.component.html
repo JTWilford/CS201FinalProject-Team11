@@ -3,14 +3,14 @@
 <div class="lab-size">
   <div class="fast-transition">
     <div class="card flex-row flex-wrap">
-      <h2>Lectures</h2>
+      <h2>Previous Exams</h2>
       <table class="table">
         <thead>
         <tr>
           <th scope="col">Semester</th>
           <th scope="col">Type</th>
           <th scope="col">Exam Link</th>
-          <th scope="col">Solution Links</th>
+          <th scope="col">Solution Link</th>
 
         </tr>
         </thead>
@@ -20,14 +20,8 @@
             <tr>
               <td>{{row.examDate}}</td>
               <td>{{row.type}}</td>
-              <td><a [href]="row.pdfLink.location">{{row.pdfLink.display}}</a></td>
-              <td>
-                <!--Generate a list of links for the additional files section-->
-                <ng-container *ngFor="let link of row.solutionLinks">
-                  <a [href]="link.location">{{link.display}}</a>
-                  <br />
-                </ng-container>
-              </td>
+              <td><a *ngIf="row.pdfLink" [href]="row.pdfLink.href">{{row.pdfLink.display}}</a></td>
+              <td><a *ngIf="row.solution" [href]="row.solution.href">{{row.solution.display}}</a></td>
             </tr>
           </ng-container>
         </ng-container>

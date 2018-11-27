@@ -57,7 +57,7 @@ CREATE TABLE PreviousExams (
   examDate VARCHAR(30) NOT NULL, # such as "Spring 2018" or "Fall 2017"
   type VARCHAR(20) NOT NULL, # (written/programming/other) type of the exam
   pdfLink INT(11), # link to the exam pdf file
-  solutions VARCHAR(300) # whether or not there are solution links
+  solution INT(11) # whether or not there are solution links
 );
 
 CREATE TABLE Calendar (
@@ -195,13 +195,27 @@ INSERT INTO LINKS (linkID, display, href)
             (305, "Lab5.pdf", ""),
             (315, "Solution (ZIP)", "");
 
-INSERT INTO PreviousExams (examDate, type, solutions)
-      VALUES ("Fall 2018", "written exam1", TRUE),
-             ("Spring 2018", "written exam1", TRUE),
-             ("Spring 2018", "written exam2", TRUE),
-             ("Fall 2017", "written exam1", TRUE),
-             ("Fall 2017", "written exam2", TRUE),
-             ("Fall 2017", "programming exam", TRUE); # the grading criteria is used as solutions
+INSERT INTO PreviousExams (examDate, type, pdfLink, solution)
+      VALUES ("Fall 2018", "Written Exam 1", 401, 411),
+             ("Spring 2018", "Written Exam 1", 402, 412),
+             ("Spring 2018", "Written Exam 2", 403, 413),
+             ("Fall 2017", "Written Exam 1", 404, 414),
+             ("Fall 2017", "Written Exam 2", 405, 415),
+             ("Fall 2017", "Programming Exam", 406, 416);
+#Previous exams links (id begins with 4)
+INSERT INTO Links (linkID, display, href)
+	VALUES	(401, "PDF", "http://www-scf.usc.edu/~csci201/exams/midterm-written-fall2018.pdf"),
+			(411, "Solution", "http://www-scf.usc.edu/~csci201/exams/midterm-written-fall2018-SOLUTION.pdf"),
+			(402, "PDF", "http://www-scf.usc.edu/~csci201/exams/midterm-written-spring2018.pdf"),
+            (412, "Solution", "http://www-scf.usc.edu/~csci201/exams/midterm-written-spring2018-SOLUTION.pdf"),
+            (403, "PDF", "http://www-scf.usc.edu/~csci201/exams/final-written-spring2018.pdf"),
+            (413, "Solution", "http://www-scf.usc.edu/~csci201/exams/final-written-spring2018-SOLUTION.pdf"),
+            (404, "PDF", "http://www-scf.usc.edu/~csci201/exams/midterm-written-fall2017.pdf"),
+            (414, "Solution", "http://www-scf.usc.edu/~csci201/exams/midterm-written-fall2017-SOLUTION.pdf"),
+            (405, "PDF", "http://www-scf.usc.edu/~csci201/exams/final-written-fall2017.pdf"),
+            (415, "Solution", "http://www-scf.usc.edu/~csci201/exams/final-written-fall2017-SOLUTION.pdf"),
+            (406, "PDF", "http://www-scf.usc.edu/~csci201/exams/final-programming-fall2017.pdf"),
+            (416, "Grading Criteria", "http://www-scf.usc.edu/~csci201/exams/final-programming-fall2017-gradingcriteria.pdf");
 
 
 INSERT INTO Calendar (title, date, startTime, endTime)

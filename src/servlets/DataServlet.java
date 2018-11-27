@@ -161,7 +161,7 @@ public class DataServlet extends HttpServlet {
 					break;
 				case "exam":		// Retrieves all the previous exam information in the PreviousExams database
 					List<Exam> exams = new ArrayList<>();
-					ps = conn.prepareStatement("SELECT examDate, type, pdfLink, solutions FROM PreviousExams");
+					ps = conn.prepareStatement("SELECT examDate, type, pdfLink, solution FROM PreviousExams");
 					rs = ps.executeQuery();
 					while (rs.next()) {
 						Exam exam = new Exam();
@@ -169,13 +169,8 @@ public class DataServlet extends HttpServlet {
 						exam.type = rs.getString("type");
 						//Get the links
 						exam.pdfLink = LinksService.getLink(rs.getInt("pdfLink"));
-						LinkedList<Integer> additional = new LinkedList<>();
-						String[] rawAddIDs = rs.getString("solutions").split(",");
-						for(String item : rawAddIDs) {
-							if(!item.equals(""))
-								additional.add(Integer.parseInt(item));
-						}
-						exam.solutions = LinksService.getLinks(additional);
+						exam.solution = LinksService.getLink(rs.getInt("solution"));
+
 						exams.add(exam);
 					}
 					//Insert into the data wrapper
@@ -283,5 +278,5 @@ class Exam {
 	String examDate; // the period of the exam is given
 	String type; // whether or not the exam was written or programming 
 	Link pdfLink; // the link to pdf of the exam
-	LinkedList<Link> solutions; // links to the solutions
+	Link solution; // links to the solutions
 }
