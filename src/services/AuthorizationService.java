@@ -128,7 +128,8 @@ public class AuthorizationService {
     }
 }
 class SessionThread extends Thread {
-    private static final long TIMEOUT_MILLIS = 600000;       //10 minutes in milliseconds
+    private static final long TIMEOUT_MILLIS = 6000000;     //1 hour in milliseconds
+//    private static final long TIMEOUT_MILLIS = 600000;       //10 minutes in milliseconds
 //    private static final long TIMEOUT_MILLIS = 120000;      //2 minutes in milliseconds
 //    private static final long TIMEOUT_MILLIS = 6000;       //6 seconds in milliseconds
 
